@@ -13,7 +13,7 @@
 
 #include <sblib/eib.h>
 #include <sblib/eib/sblib_default_objects.h>
-#include <sblib/io_pin_names.h>
+
 #include "outputs.h"
 #include "bus_voltage.h"
 #include "app_nov_settings.h"
@@ -71,36 +71,6 @@ const char * getAppVersion()
     return APP_VERSION;
 }
 */
-
-// Output pins
-#ifdef BI_STABLE
-const int outputPins[NO_OF_OUTPUTS] =
-{ PIN_IO2,  PIN_IO3 //  1,  2
-, PIN_IO5,  PIO_SDA //  3,  4
-, PIN_PWM,  PIN_APRG //  5,  6
-, PIN_IO1,  PIN_IO4 //  7,  8
-
-, PIN_TX,   PIN_IO11   // 15, 16
-, PIN_IO10, PIN_RX // 13, 14
-, PIN_IO14, PIN_IO15 // 11, 12
-, PIN_IO9,  PIN_IO13 //  9, 10
-};
-#if 0
-    { PIN_IO3,  PIN_IO2 //  1,  2
-    , PIN_IO12, PIN_IO5 //  3,  4
-    , PIN_APRG, PIN_PWM //  5,  6
-    , PIN_IO4,  PIN_IO1 //  7,  8
-
-    , PIN_IO13, PIN_IO9 //  9, 10
-    , PIN_IO15, PIN_IO14 // 11, 12
-    , PIN_RX,   PIN_IO10 // 13, 14
-    , PIN_IO11, PIN_TX   // 15, 16
-    };
-#endif
-#else
-const int outputPins[NO_OF_OUTPUTS] =
-    { PIN_IO1, PIN_IO2, PIN_IO3, PIN_IO4, PIN_IO5, PIN_IO6, PIN_IO7, PIN_IO8 };
-#endif
 
 ObjectValues& objectValues = *(ObjectValues*) (userRamData + UR_COM_OBJ_VALUE0);
 
