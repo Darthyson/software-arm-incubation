@@ -16,10 +16,11 @@
  */
 #ifdef HAND_ACTUATION
     const int handPins[NO_OF_HAND_PINS] =
-            //  { PIN_LT5, PIN_LT6, PIN_LT1, PIN_LT2, PIN_LT3, PIN_LT4, PIN_LT7, PIN_LT8 }; // these are not correct
-            { PIN_LT1, PIN_LT2, PIN_LT3, PIN_LT4, PIN_LT5, PIN_LT6, PIN_LT7, PIN_LT8 };
+           // LedTaster_4TE_3.54 : links oben = Kanal 1 nach unten aufsteigende Kanalnummer ; rechts oben = Kanal 5 ; nach unten aufsteigende Kanalnummer
+           { PIN_LT1, PIN_LT2, PIN_LT3, PIN_LT4, PIN_LT5, PIN_LT6, PIN_LT7, PIN_LT8 };
+           // these are not correct / Pinbelegung für Hardware ???
+           //  { PIN_LT5, PIN_LT6, PIN_LT1, PIN_LT2, PIN_LT3, PIN_LT4, PIN_LT7, PIN_LT8 };
 #endif
-
 #define HAND_READBACK PIN_LT9
 #define BLINK_TIME 500
 
