@@ -43,7 +43,7 @@
  *      bus fail detection
  */
 
-// #define IO_TEST
+// #define IO_TEST // can be set, to perform a little test of all relays and hand actuation LED's
 
 #define NO_OF_HAND_PINS 8 // FIXME get rid of this
 
@@ -103,9 +103,15 @@
         // Wiki: https://selfbus.myxwiki.org/xwiki/bin/view/Ger%C3%A4te/Ausg%C3%A4nge/8fach%20Bin%C3%A4rausgang%20230V%2016A%20f%C3%BCr%20LPC1115%20Controller
         const int outputPins[NO_OF_OUTPUTS] =
         {
+            /*
+             * PIO_SDA=PIO0_5 PIO0_5 is a open-drain pin & needs a pull-up resistor
+             * see LPC user manual page 79 chapter 7.4.12 IOCON_PIO0_5.
+             * better solution would be to use IO7 instead.
+             */
+
             // K1 -> K4
             PIN_IO2,  PIN_IO3,  //  1,  2 => K1 reset/set
-            PIN_IO5,  PIO_SDA,  //  3,  4 => K2 reset/set
+            PIN_IO5,  PIO_SDA,  //  3,  4 => K2 reset/set // PIO_SDA-> pull-up resistor!
             PIN_PWM,  PIN_APRG, //  5,  6 => K3 reset/set
             PIN_IO1,  PIN_IO4,  //  7,  8 => K4 reset/set
 
@@ -129,7 +135,7 @@
                 PIN_IO10, PIN_RX,   // Kanal 5
                 PIN_TX,   PIN_IO11, // Kanal 6
                 PIN_IO14, PIN_IO15, // Kanal 7
-                PIN_IO9,  PIN_IO13 // Kanal 8
+                PIN_IO9,  PIN_IO13  // Kanal 8
             };
 #       endif
 
