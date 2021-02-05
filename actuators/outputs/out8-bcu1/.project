@@ -4,7 +4,7 @@
 	<comment></comment>
 	<projects>
 		<project>CMSIS_CORE_LPC11xx</project>
-		<project>sblib-cpp</project>
+		<project>sblib</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
@@ -30,7 +30,7 @@
 		<link>
 			<name>src/bus_voltage</name>
 			<type>2</type>
-			<location>D:/SVN/Selfbus Darthyson/software-arm-incubation/common/bus_voltage</location>
+			<locationURI>PARENT-3-PROJECT_LOC/common/bus_voltage</locationURI>
 		</link>
 		<link>
 			<name>src/hand-actuation</name>
