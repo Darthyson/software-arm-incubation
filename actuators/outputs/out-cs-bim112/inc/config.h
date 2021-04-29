@@ -56,9 +56,9 @@
 /*Erweiterung für unterschiedliche Hardware mit/ohne Strommessung
  *===============================================================
  *
- *-DTS_ARM_2CH	2-Kanal Schaltaktor ohne Strommessung für Hardware TS-ARM 3.0.8 und 2out_16A_bi_TS-ARM_V1.0
- *				bistabile Relais direkt, also nicht über SPI angesteuert
- *				Konfiguration als ABB SA/S2.16.2.1
+ *-DHW_2CH_WO_CS	2-Kanal Schaltaktor ohne Strommessung für Hardware TS-ARM 3.0.8 und 2out_16A_bi_TS-ARM_V1.0
+ *					bistabile Relais direkt, also nicht über SPI angesteuert
+ *					Konfiguration als ABB SA/S2.16.2.1
  *
  */
 
@@ -293,7 +293,7 @@
 
 #if CHANNELCNT <= 2
 
-#ifndef TS_ARM_2CH
+#ifndef HW_2CH_WO_CS
 // mit Strommessung
 #define DEVICETYPE 0xA05B // SA/S2.16.6.1
 #define SPIRELDRIVERBYTES 1
