@@ -131,7 +131,8 @@ void initSerial()
 #ifdef DEBUG_SERIAL
     serial.setRxPin(PIO2_7);
     serial.setTxPin(PIO2_8);
-    serial.begin(57600);
+    serial.begin(1500000);
+    // serial.begin(115200);
     serial.println("out8 serial debug started");
 #endif
 }

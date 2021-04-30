@@ -14,6 +14,9 @@
 #include <string.h> /* for memcpy() */
 #include "config.h"
 
+#if defined(DUMP_PROPERTIES) || defined(DUMP_MEM_OPS)
+#   include <sblib/serial.h>
+#endif
 
 const HardwareVersion * currentVersion;
 /**
@@ -28,7 +31,11 @@ void setup()
     //bcu.setTxPin(PIO1_9);
 #endif
 
-    //debug_init();
+    // debug_init();
+#if defined(DUMP_PROPERTIES) || defined(DUMP_MEM_OPS)
+    serial.setRxPin(PIO2_7);
+    serial.setTxPin(PIO2_8);
+#endif
 	currentVersion = &hardwareVersion[HARDWARE_ID];
     bcu.begin(MANUFACTURER, currentVersion->deviceType, currentVersion->appVersion);
 

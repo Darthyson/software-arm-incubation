@@ -44,7 +44,7 @@
  */
 
 // #define IO_TEST // can be set, to perform a little test of all relays and hand actuation LED's
-// #define DEBUG_SERIAL // can be set, to send some debug messages over the serial port
+#define DEBUG_SERIAL // can be set, to send some debug messages over the serial port
 
 // #define BI_STABLE // replaced by build-variable ${relay_type}
 // #define HAND_ACTUATION // replaced by build-variable ${hand_actuation}
