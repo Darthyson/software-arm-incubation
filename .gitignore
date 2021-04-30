@@ -2,6 +2,7 @@ Debug*/
 Release*/
 Flashstart*/
 *.launch
+*.jlink
 *~
 *.o
 *.pyc
