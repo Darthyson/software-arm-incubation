@@ -25,6 +25,10 @@
 #include <DebugFunc.h>
 #include <string.h> /* for memcpy() */
 
+#ifdef DUMP_PROPERTIES
+    #include <sblib/serial.h>
+#endif
+
 
 // System time in milliseconds (from timer.cpp)
 extern volatile unsigned int systemTime;
@@ -108,9 +112,20 @@ void setup()
  LastTimeFctTime = LastRelTime = LastManCtrlTime = systemTime;
  AppOperatingState = AppOperatingStates::Startup;
  // //RelTestEnqueue();
- bcu.setProgPin(PIOPROGBTN);
- bcu.setProgPinInverted(true);
+
+#if defined(DUMP_PROPERTIES)
+    bcu.setProgPin(PIO2_0);
+    serial.setRxPin(PIO2_7);
+    serial.setTxPin(PIO2_8);
+    serial.begin(1500000);
+    bcu.setProgPinInverted(true);
+#else
+    bcu.setProgPin(PIOPROGBTN);
+    bcu.setProgPinInverted(true);
+#endif
+
  // das Ding ist ein BIM112 "Maskenversion 0701"
+ //bcu.begin(MANUFACTURER, DEVICETYPE, APPVERSION, 0x4400);
  bcu.begin(MANUFACTURER, DEVICETYPE, APPVERSION);
  // _bcu und bcu sind das gleiche Objekt.
  // _bcu ist vom Typ BCU, während bcu vom Typ BcuBase ist.

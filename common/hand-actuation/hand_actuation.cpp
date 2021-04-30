@@ -11,6 +11,20 @@
 #include <sblib/digital_pin.h>
 #include <sblib/timer.h>
 #include <sblib/io_pin_names.h>
+#include <sblib/interrupt.h>
+
+extern "C" void PIOINT3_IRQHandler (void)
+{
+    // FIXME make PIN_LT9/PIO2_3 selectable
+    LPC_GPIO_TypeDef* port = gpioPorts[digitalPinToPort(PIO2_3)];
+    unsigned short mask = digitalPinToBitMask(PIO2_3);
+
+    port->IC  &= ~mask;  // clear the interrupt
+
+    // LPC_GPIO_TypeDef* port = gpioPorts[0];
+    // port->IC  =  1<<5;
+    // HandActuation::check(); // FIXME call check
+}
 
 HandActuation::HandActuation()
    : number_(0)
@@ -40,6 +54,10 @@ HandActuation::HandActuation(const unsigned int* Pins, const unsigned int pinCou
 
     readbackPin_ = readbackPin;
     pinMode(readbackPin_, PULL_UP);
+    // FIXME, make interrupt selectable and optional fall back to polling
+    pinInterruptMode(readbackPin_, INTERRUPT_EDGE_FALLING | INTERRUPT_ENABLED);
+    enableInterrupt(EINT3_IRQn);
+    pinEnableInterrupt(readbackPin_);
 
     blinkTimeMs_ = blinkTimeMs;
     blinkTimer.start(blinkTimeMs_);
