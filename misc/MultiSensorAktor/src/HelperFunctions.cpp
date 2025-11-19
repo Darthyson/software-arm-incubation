@@ -7,10 +7,11 @@
 #include <sblib/eib/bcu_base.h>
 
 #include "HelperFunctions.h"
+#include <sblib/eib/typesBCU2.h>
 
-void HelperFunctions::setComObjPtr(BcuBase* bcu, int objno, ComType type, uint16_t &newAddr)
+void HelperFunctions::setComObjPtr(ComObjects* bcu, int objno, ComType type, uint16_t &newAddr)
 {
-	const byte* configTable = bcu->comObjects->objectConfigTable();
+	const byte* configTable = bcu->objectConfigTable();
 	if (configTable != nullptr)
 	{
 		int size = 1;
@@ -45,9 +46,9 @@ void HelperFunctions::setComObjPtr(BcuBase* bcu, int objno, ComType type, uint16
 	}
 }
 
-void HelperFunctions::setFlagsTablePtr(BcuBase* bcu, uint16_t flagsAddr)
+void HelperFunctions::setFlagsTablePtr(ComObjects* bcu, uint16_t flagsAddr)
 {
-	byte* configTable = bcu->comObjects->objectConfigTable();
+	byte* configTable = bcu->objectConfigTable();
 	if (configTable != nullptr)
 	{
 	    if (false)

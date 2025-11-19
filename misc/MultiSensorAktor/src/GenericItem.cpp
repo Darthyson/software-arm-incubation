@@ -8,4 +8,4 @@
 
 #include <GenericItem.h>
 
-BcuBase* GenericItem::BCU;
+ComObjects* GenericItem::comObjects;

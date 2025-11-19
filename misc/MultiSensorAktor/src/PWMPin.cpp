@@ -31,8 +31,8 @@ uint16_t currentPwmValue = 0;
 
 PWMPin::PWMPin(byte firstComIndex, PWMPinConfig* config, GenericItem* parent, uint16_t& objRamPointer) : GenericPin(firstComIndex), config(config), parent(parent)
 {
-	BCU->comObjects->requestObjectRead(firstComIndex);
-	BCU->comObjects->requestObjectRead(firstComIndex + 1);
+	comObjects->requestObjectRead(firstComIndex);
+	comObjects->requestObjectRead(firstComIndex + 1);
 
 	freqScaler = 0;
 	freqDivider = (256 << freqScaler) - 1;
@@ -64,9 +64,9 @@ PWMPin::PWMPin(byte firstComIndex, PWMPinConfig* config, GenericItem* parent, ui
 //	nextPin = firstPwmPin;
 //	firstPwmPin = this;
 
-	HelperFunctions::setComObjPtr(BCU, firstComIndex, BYTE_1, objRamPointer);
-	HelperFunctions::setComObjPtr(BCU, firstComIndex + 1, BIT_1, objRamPointer);
-	HelperFunctions::setComObjPtr(BCU, firstComIndex + 2, BIT_1, objRamPointer);
+	HelperFunctions::setComObjPtr(comObjects, firstComIndex, BYTE_1, objRamPointer);
+	HelperFunctions::setComObjPtr(comObjects, firstComIndex + 1, BIT_1, objRamPointer);
+	HelperFunctions::setComObjPtr(comObjects, firstComIndex + 2, BIT_1, objRamPointer);
 }
 
 byte PWMPin::GetState(uint32_t now, byte updatedObjectNo)
@@ -76,12 +76,12 @@ byte PWMPin::GetState(uint32_t now, byte updatedObjectNo)
 		switch (config->FixedValueSwitch)
 		{
 		case PortFixedPwmValueNever:
-			value = BCU->comObjects->objectRead(firstComIndex);
+			value = comObjects->objectRead(firstComIndex);
 			break;
 		case PortFixedPwmValueOnLock:
-			if (BCU->comObjects->objectRead(firstComIndex + 1))
+			if (comObjects->objectRead(firstComIndex + 1))
 			{
-				value = BCU->comObjects->objectRead(firstComIndex);
+				value = comObjects->objectRead(firstComIndex);
 			}
 			else
 			{
@@ -89,7 +89,7 @@ byte PWMPin::GetState(uint32_t now, byte updatedObjectNo)
 			}
 			break;
 		case PortFixedPwmValueAlways:
-			if (BCU->comObjects->objectRead(firstComIndex))
+			if (comObjects->objectRead(firstComIndex))
 			{
 				value = config->FixedValueOnOff;
 			}

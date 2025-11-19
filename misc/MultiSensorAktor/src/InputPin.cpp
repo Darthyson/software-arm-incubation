@@ -25,20 +25,20 @@ InputPin::InputPin(byte firstComObj, InputPinConfig *config, uint16_t& objRamPoi
 
 	if (config->Hi == PortInToggle || config->Lo == PortInToggle)
 	{
-		BCU->comObjects->requestObjectRead(firstComObj);
+		comObjects->requestObjectRead(firstComObj);
 	}
-	BCU->comObjects->requestObjectRead(firstComObj + 2);
+	comObjects->requestObjectRead(firstComObj + 2);
    	if (longActive && (config->HiLong == PortInToggle || config->LoLong == PortInToggle))
    	{
-   		BCU->comObjects->requestObjectRead(firstComObj + 1);
+   		comObjects->requestObjectRead(firstComObj + 1);
    	}
 
    	debouncer.init(100);
    	debouncer.debounce(100, 0);
 
-   	HelperFunctions::setComObjPtr(BCU, firstComIndex, BIT_1, objRamPointer);
-	HelperFunctions::setComObjPtr(BCU, firstComIndex + 1, BIT_1, objRamPointer);
-	HelperFunctions::setComObjPtr(BCU, firstComIndex + 2, BIT_1, objRamPointer);
+   	HelperFunctions::setComObjPtr(comObjects, firstComIndex, BIT_1, objRamPointer);
+	HelperFunctions::setComObjPtr(comObjects, firstComIndex + 1, BIT_1, objRamPointer);
+	HelperFunctions::setComObjPtr(comObjects, firstComIndex + 2, BIT_1, objRamPointer);
 }
 
 void InputPin::PutValue(uint32_t now, int val)
@@ -102,12 +102,12 @@ void InputPin::setObj(int idx, byte item)
 	case PortInNothing:
 		break;
 	case PortInOff:
-		BCU->comObjects->objectWrite(idx, (unsigned int)0);
+		comObjects->objectWrite(idx, (unsigned int)0);
 		break;
 	case PortInOn:
-		BCU->comObjects->objectWrite(idx, (unsigned int)1);
+		comObjects->objectWrite(idx, (unsigned int)1);
 		break;
 	case PortInToggle:
-		BCU->comObjects->objectWrite(idx, !BCU->comObjects->objectRead(idx));
+		comObjects->objectWrite(idx, !comObjects->objectRead(idx));
 	}
 }

@@ -7,7 +7,7 @@
 #ifndef GENERICPIN_H_
 #define GENERICPIN_H_
 
-#include <sblib/eib/bcu_base.h>
+#include <sblib/eib/com_objects.h>
 
 class GenericPin
 {
@@ -21,7 +21,7 @@ public:
 	virtual int ConfigLength() = 0;
 	virtual int ComObjCount() = 0;
 
-	static BcuBase* BCU;
+	static ComObjects* comObjects;
 
 protected:
 	byte firstComIndex;

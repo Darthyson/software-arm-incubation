@@ -11,7 +11,7 @@
 
 CounterPin::CounterPin(byte firstComIndex, CounterPinConfig *config) : GenericPin(firstComIndex), config(config)
 {
-   	BCU->comObjects->requestObjectRead(firstComIndex);
+   	comObjects->requestObjectRead(firstComIndex);
 }
 
 void CounterPin::PutValue(uint32_t now, int val)
@@ -19,17 +19,17 @@ void CounterPin::PutValue(uint32_t now, int val)
 	int value = debouncer.value();
 	if (value != lastValue && !value)
 	{
-		float val = BCU->comObjects->objectRead(firstComIndex);
+		float val = comObjects->objectRead(firstComIndex);
 		val += config->Increment;
 		val = roundFloat(val, config->Decimals);
-		BCU->comObjects->objectWrite(firstComIndex, (byte*)&val);
+		comObjects->objectWrite(firstComIndex, (byte*)&val);
 
 		if (lastTime < now)
 		{
-			BCU->comObjects->objectWrite(firstComIndex + 1, now - lastTime);
+			comObjects->objectWrite(firstComIndex + 1, now - lastTime);
 			float freq = 3600000.0f / (now - lastTime);
 			freq = roundFloat(freq, config->DecimalsFreq);
-			BCU->comObjects->objectWrite(firstComIndex + 2, (byte*)&freq);
+			comObjects->objectWrite(firstComIndex + 2, (byte*)&freq);
 		}
 	}
 }

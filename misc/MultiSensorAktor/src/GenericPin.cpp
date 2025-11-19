@@ -8,5 +8,5 @@
 
 #include <GenericPin.h>
 
-BcuBase* GenericPin::BCU;
+ComObjects* GenericPin::comObjects;
 

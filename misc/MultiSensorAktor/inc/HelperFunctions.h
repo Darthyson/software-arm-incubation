@@ -7,13 +7,12 @@
 #ifndef HELPERFUNCTIONS_H_
 #define HELPERFUNCTIONS_H_
 
-#include <sblib/eib/bcu_base.h>
-#include <sblib/eib/typesBCU2.h>
+#include <sblib/eib/com_objects.h>
 
 class HelperFunctions {
 public:
-	static void setComObjPtr(BcuBase* bcu, int objno, ComType type, uint16_t& addr);
-	static void setFlagsTablePtr(BcuBase* bcu, uint16_t flagsAddr);
+	static void setComObjPtr(ComObjects* bcu, int objno, ComType type, uint16_t& addr);
+	static void setFlagsTablePtr(ComObjects* bcu, uint16_t flagsAddr);
 };
 
 #endif /* HELPERFUNCTIONS_H_ */

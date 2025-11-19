@@ -44,8 +44,8 @@ BcuBase* setup()
     bcu.setHardwareType(hardwareVersion, sizeof(hardwareVersion));
     bcu.begin(0x13A, 0x01, 0x0B); // Manufacturer name "Not assigned", app-id 0x01, version 0.10
 
-    GenericItem::BCU = &bcu;
-    GenericPin::BCU = &bcu;
+    GenericItem::comObjects = bcu.comObjects;
+    GenericPin::comObjects = bcu.comObjects;
 
     pinMode(PIO_LED, OUTPUT);
     digitalWrite(PIO_LED, 1);
@@ -53,7 +53,7 @@ BcuBase* setup()
     memMapper.addRange(0x6000, 0xF00);
     bcu.setMemMapper(&memMapper);
 
-    HelperFunctions::setFlagsTablePtr(&bcu, 0x6C5);
+    HelperFunctions::setFlagsTablePtr(bcu.comObjects, 0x6C5);
     uint16_t objRamPointer = 0x5FC;
 
     DeviceConfig* deviceConfig = (DeviceConfig*)&(*bcu.userEeprom)[CONFIG_ADDRESS];

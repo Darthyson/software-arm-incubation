@@ -18,10 +18,10 @@ SHT2xItem::SHT2xItem(byte firstComIndex, TempHumSensorConfig *config, GenericIte
 	sht2x.Init();
 	offset = dpt9ToFloat(config->Offset) * 0.01f;
 
-	HelperFunctions::setComObjPtr(BCU, firstComIndex, BIT_1, objRamPointer);
-	HelperFunctions::setComObjPtr(BCU, firstComIndex + 1, BYTE_2, objRamPointer);
-	HelperFunctions::setComObjPtr(BCU, firstComIndex + 2, BYTE_4, objRamPointer);
-	HelperFunctions::setComObjPtr(BCU, firstComIndex + 3, BYTE_2, objRamPointer);
+	HelperFunctions::setComObjPtr(comObjects, firstComIndex, BIT_1, objRamPointer);
+	HelperFunctions::setComObjPtr(comObjects, firstComIndex + 1, BYTE_2, objRamPointer);
+	HelperFunctions::setComObjPtr(comObjects, firstComIndex + 2, BYTE_4, objRamPointer);
+	HelperFunctions::setComObjPtr(comObjects, firstComIndex + 3, BYTE_2, objRamPointer);
 }
 
 void SHT2xItem::Loop(uint32_t now, int updatedObjectNo)
@@ -33,7 +33,7 @@ void SHT2xItem::Loop(uint32_t now, int updatedObjectNo)
 		case 0:
 			if (config->PreFan > 0)
 			{
-				BCU->comObjects->objectWrite(firstComIndex, 1);
+				comObjects->objectWrite(firstComIndex, 1);
 				nextAction = now + (config->PreFan * 1000);
 			}
 			else
@@ -45,7 +45,7 @@ void SHT2xItem::Loop(uint32_t now, int updatedObjectNo)
 		case 1:
 			if (config->PreFan > 0)
 			{
-				BCU->comObjects->objectWrite(firstComIndex, (int)0);
+				comObjects->objectWrite(firstComIndex, (int)0);
 				nextAction = now + (config->PreMeasure * 1000);
 			}
 			else
@@ -58,9 +58,9 @@ void SHT2xItem::Loop(uint32_t now, int updatedObjectNo)
 			int16_t temp = (int16_t)(sht2x.GetTemperature());
 			float ftemp = temp * 0.01f + offset;
 			uint16_t hum = (uint16_t)(sht2x.GetHumidity());
-			BCU->comObjects->objectWriteFloat(firstComIndex + 1, temp);
-			BCU->comObjects->objectWrite(firstComIndex + 2, (byte*)&ftemp);
-			BCU->comObjects->objectWriteFloat(firstComIndex + 3, hum);
+			comObjects->objectWriteFloat(firstComIndex + 1, temp);
+			comObjects->objectWrite(firstComIndex + 2, (byte*)&ftemp);
+			comObjects->objectWriteFloat(firstComIndex + 3, hum);
 			nextAction = now + (config->Delay * 1000);
 			state = 0;
 			break;

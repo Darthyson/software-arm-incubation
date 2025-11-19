@@ -61,7 +61,7 @@ PCA9555DItem::PCA9555DItem(byte firstComIndex, PCA9555DConfig *config, GenericIt
 				inOutConfig |= (1 << i);
 				continue;
 			}
-			BCU->comObjects->requestObjectRead(firstComIndex + 2);
+			comObjects->requestObjectRead(firstComIndex + 2);
 			configured = true;
 
 			nextComObj += 4;
