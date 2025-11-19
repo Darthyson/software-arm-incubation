@@ -34,6 +34,7 @@ public:
     ~BcuFt12() = default;
     void begin();
     bool applicationRunning() const override {return (enabled);}
+    uint8_t& layerStatus() override;
 
 protected:
     bool processApci(ApciCommand apciCmd, unsigned char * telegram, uint8_t telLength, uint8_t * sendBuffer);

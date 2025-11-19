@@ -444,7 +444,7 @@ bool processVariableFrame(uint8_t* frame, uint8_t length)
 
         if (ackRequest != ((bcuFt12.userRam->status() & BCU_STATUS_LINK_LAYER) == BCU_STATUS_LINK_LAYER))
         {
-            //\todo doesnÂ´t work right now with our Updater, which does no ft12 link configuration
+            //\todo doesn´t work right now with our Updater, which does no ft12 link configuration
             // match data link layer and ackRequest
             //bcu.userRam->status() ^= BCU_STATUS_LINK_LAYER | BCU_STATUS_PARITY;
         }

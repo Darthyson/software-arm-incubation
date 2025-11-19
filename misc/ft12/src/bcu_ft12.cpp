@@ -52,5 +52,9 @@ bool BcuFt12::processGroupAddressTelegram(ApciCommand apciCmd, uint16_t groupAdd
     return (true);
 }
 
+uint8_t& BcuFt12::layerStatus()
+{
+    return userRam->status();
+}
 
 /** @}*/
