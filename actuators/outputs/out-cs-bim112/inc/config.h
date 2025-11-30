@@ -55,13 +55,13 @@
 /*Erweiterung für unterschiedliche Hardware mit/ohne Strommessung
  *===============================================================
  *
- *-DHW_2CH_WO_CS	2-Kanal Schaltaktor ohne Strommessung für Hardware TS-ARM 3.0.8 und 2out_16A_bi_TS-ARM_V1.0
- *				bistabile Relais direkt, also nicht über SPI angesteuert
- *				Konfiguration als ABB SA/S2.16.2.1
+ *-DHW_2CH_WO_CS    2-Kanal Schaltaktor ohne Strommessung für Hardware TS-ARM 3.0.8 und 2out_16A_bi_TS-ARM_V1.0
+ *                  bistabile Relais direkt, also nicht über SPI angesteuert
+ *                  Konfiguration als ABB SA/S2.16.2.1
  *
  *
  *-DHW_8CH_WO_CS    8-Kanal Schaltaktor ohne Strommessung für Hardware lpc1115_4te_top, out8 - Addon energy storage - 4TE MID und out8 - Applikation 4TE BOT
- *				Konfiguration als ABB SA/S8.16.2.1
+ *                  Konfiguration als ABB SA/S8.16.2.1
  *
  */
 
@@ -274,7 +274,7 @@
 #   define BUTTONLEDCH2  PIO0_11 // TS-ARM IO12
 #   define BUTTONLEDCH3  PIO3_4
 #   define BUTTONLEDCH4  PIO2_5
-#   define BUTTONLEDCOM  PIO0_8	 // TS-ARM IO10
+#   define BUTTONLEDCOM  PIO0_8  // TS-ARM IO10
 #   define PIOPROGBTN PIO2_0     // Programming button for TS-ARM
 #else
 #   error "Unknown or no hardware defined!"
