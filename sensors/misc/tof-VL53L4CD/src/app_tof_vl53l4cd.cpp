@@ -10,7 +10,8 @@
 #include <sblib/serial.h>
 #include <sblib/i2c/tof/VL53L4CD_api.h>
 #include <sblib/i2c/tof/VL53L4CD_calibration.h>
-#include <cmath> // for fabsf
+#include <sblib/math.h> //
+//#include <cmath> // for fabsf ///\todo cmath and fabsf
 
 
 MASK0701 bcu;
@@ -86,7 +87,9 @@ bool sendStatusIfChanged(VL53L4CD_Error newStatus)
 bool sendRangeIfChanged(float newRange, float delta)
 {
     float currentRange = dpt14ToFloat(bcu.comObjects->objectRead(COMOBJ_1_MESSWERT_IN_METER_AUSGANG));
-    if (fabsf(currentRange - newRange) < delta)
+    ///\todo use fabsf of cmath
+    ///if (fabsf(currentRange - newRange) < delta)
+    if (abs(currentRange - newRange) < delta)
     {
         return false;
     }
