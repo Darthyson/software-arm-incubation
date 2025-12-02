@@ -7,8 +7,8 @@
 #ifndef APP_TOF_VL53L4CD_CONFIG_H_
 #define APP_TOF_VL53L4CD_CONFIG_H_
 
-#include <stdint.h>
 #include <sblib/io_pin_names.h>
+#include <cstdint>
 
 constexpr uint16_t MinimumSendThreshold_mm = 3;
 constexpr uint32_t SendPeriodicInterval_ms = 1000;

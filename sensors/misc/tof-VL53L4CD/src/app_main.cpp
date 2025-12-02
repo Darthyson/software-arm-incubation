@@ -4,10 +4,10 @@
  *  published by the Free Software Foundation.
  */
 
+#include "app_tof_vl53l4cd.h"
+#include "config.h"
 #include <sblib/mem_mapper.h>
 
-#include "config.h"
-#include "app_tof_vl53l4cd.h"
 
 APP_VERSION("VL53L4CD", "0", "01"); // Don't forget to also change the build-variable sw_version
 

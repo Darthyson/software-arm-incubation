@@ -4,15 +4,14 @@
  *  published by the Free Software Foundation.
  */
 
-#include <cstring>
-#include <math.h>
+#include "app_tof_vl53l4cd.h"
+#include "config.h"
 #include <sblib/timeout.h>
 #include <sblib/serial.h>
 #include <sblib/i2c/tof/VL53L4CD_api.h>
 #include <sblib/i2c/tof/VL53L4CD_calibration.h>
+#include <cmath> // for fabsf
 
-#include "config.h"
-#include "app_tof_vl53l4cd.h"
 
 MASK0701 bcu;
 
@@ -87,7 +86,7 @@ bool sendStatusIfChanged(VL53L4CD_Error newStatus)
 bool sendRangeIfChanged(float newRange, float delta)
 {
     float currentRange = dpt14ToFloat(bcu.comObjects->objectRead(COMOBJ_1_MESSWERT_IN_METER_AUSGANG));
-    if (abs(currentRange - newRange) < delta)
+    if (fabsf(currentRange - newRange) < delta)
     {
         return false;
     }
