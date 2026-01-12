@@ -2,8 +2,10 @@
 // Created by Mario Theodoridis on 17.05.20.
 //
 
-#include <sblib/io_pin_names.h>
 #include "common.h"
+#include <sblib/io_pin_names.h>
+#include <cmath>
+
 
 // Enable the Parasite power (check ds18x20 Datasheet )
 #define PARASITE_POWER  false
