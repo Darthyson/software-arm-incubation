@@ -6,6 +6,7 @@
 
 #include <sblib/eib/bcu_base.h>
 #include <sblib/i2c.h>
+#include <sblib/digital_pin.h>
 
 #include <PCA9555DItem.h>
 #include <DummyPin.h>
