@@ -1,8 +1,10 @@
 //
 // Created by Mario Theodoridis on 17.05.20.
 //
-#include <sblib/analog_pin.h>
 #include "common.h"
+#include <sblib/analog_pin.h>
+#include <algorithm>
+
 
 // Enable the Parasite power (check ds18x20 Datasheet )
 #define PARASITE_POWER  false
