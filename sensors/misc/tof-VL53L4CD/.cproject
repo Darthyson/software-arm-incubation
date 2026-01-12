@@ -47,7 +47,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/CMSIS_CORE_LPC11xx/inc}&quot;"/>
 								</option>
 								<option id="com.crt.advproject.cpp.exe.debug.option.optimization.level.1042952111" name="Optimization Level" superClass="com.crt.advproject.cpp.exe.debug.option.optimization.level" useByScannerDiscovery="true"/>
-								<option id="com.crt.advproject.cpp.misc.dialect.1150019524" name="Language standard" superClass="com.crt.advproject.cpp.misc.dialect" useByScannerDiscovery="true" value="com.crt.advproject.misc.dialect.gnupp11" valueType="enumerated"/>
+								<option id="com.crt.advproject.cpp.misc.dialect.1150019524" name="Language standard" superClass="com.crt.advproject.cpp.misc.dialect" useByScannerDiscovery="true" value="com.crt.advproject.misc.dialect.gnupp17" valueType="enumerated"/>
 								<inputType id="com.crt.advproject.compiler.cpp.input.1259821586" superClass="com.crt.advproject.compiler.cpp.input"/>
 							</tool>
 							<tool id="com.crt.advproject.gcc.exe.debug.562529939" name="MCU C Compiler" superClass="com.crt.advproject.gcc.exe.debug">
@@ -181,6 +181,7 @@
 								<option id="com.crt.advproject.cpp.lto.319638323" name="Enable Link-time optimization (-flto)" superClass="com.crt.advproject.cpp.lto" useByScannerDiscovery="false" value="true" valueType="boolean"/>
 								<option id="com.crt.advproject.cpp.exe.release.option.debugging.level.708416027" name="Debug Level" superClass="com.crt.advproject.cpp.exe.release.option.debugging.level" useByScannerDiscovery="false" value="gnu.cpp.compiler.debugging.level.none" valueType="enumerated"/>
 								<option id="com.crt.advproject.cpp.exe.release.option.optimization.level.2026618432" name="Optimization Level" superClass="com.crt.advproject.cpp.exe.release.option.optimization.level" useByScannerDiscovery="true"/>
+								<option id="com.crt.advproject.cpp.misc.dialect.1022965271" superClass="com.crt.advproject.cpp.misc.dialect" value="com.crt.advproject.misc.dialect.gnupp17" valueType="enumerated"/>
 								<inputType id="com.crt.advproject.compiler.cpp.input.678807568" superClass="com.crt.advproject.compiler.cpp.input"/>
 							</tool>
 							<tool id="com.crt.advproject.gcc.exe.release.569722035" name="MCU C Compiler" superClass="com.crt.advproject.gcc.exe.release">
@@ -318,6 +319,7 @@
 								<option id="com.crt.advproject.cpp.lto.946555572" name="Enable Link-time optimization (-flto)" superClass="com.crt.advproject.cpp.lto" useByScannerDiscovery="false" value="true" valueType="boolean"/>
 								<option id="com.crt.advproject.cpp.exe.release.option.debugging.level.331409306" name="Debug Level" superClass="com.crt.advproject.cpp.exe.release.option.debugging.level" useByScannerDiscovery="false" value="gnu.cpp.compiler.debugging.level.none" valueType="enumerated"/>
 								<option id="com.crt.advproject.cpp.exe.release.option.optimization.level.1080022693" name="Optimization Level" superClass="com.crt.advproject.cpp.exe.release.option.optimization.level" useByScannerDiscovery="true"/>
+								<option id="com.crt.advproject.cpp.misc.dialect.1800956899" superClass="com.crt.advproject.cpp.misc.dialect" value="com.crt.advproject.misc.dialect.gnupp17" valueType="enumerated"/>
 								<inputType id="com.crt.advproject.compiler.cpp.input.1272074796" superClass="com.crt.advproject.compiler.cpp.input"/>
 							</tool>
 							<tool id="com.crt.advproject.gcc.exe.release.752562044" name="MCU C Compiler" superClass="com.crt.advproject.gcc.exe.release">
@@ -453,6 +455,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/CMSIS_CORE_LPC11xx/inc}&quot;"/>
 								</option>
 								<option id="com.crt.advproject.cpp.exe.debug.option.optimization.level.1701711833" name="Optimization Level" superClass="com.crt.advproject.cpp.exe.debug.option.optimization.level" useByScannerDiscovery="true"/>
+								<option id="com.crt.advproject.cpp.misc.dialect.367771348" superClass="com.crt.advproject.cpp.misc.dialect" value="com.crt.advproject.misc.dialect.gnupp17" valueType="enumerated"/>
 								<inputType id="com.crt.advproject.compiler.cpp.input.1773034289" superClass="com.crt.advproject.compiler.cpp.input"/>
 							</tool>
 							<tool id="com.crt.advproject.gcc.exe.debug.367263791" name="MCU C Compiler" superClass="com.crt.advproject.gcc.exe.debug">
@@ -597,6 +600,7 @@
 		<configuration configurationName="Multiple configurations">
 			<resource resourceType="PROJECT" workspacePath="/tof-VL53L4CD"/>
 		</configuration>
+		<configuration configurationName="Flashstart 0x3000 Release Fused IO"/>
 		<configuration configurationName="Flashstart 0x3000 Debug TS_ARM">
 			<resource resourceType="PROJECT" workspacePath="/tof-VL53L4CD"/>
 		</configuration>
