@@ -22,6 +22,9 @@
 #include <AdcIsr.h>
 #include <crc8.h>
 
+#include <algorithm>
+
+
 Appl appl;
 
 MASK0701 bcu = MASK0701();
@@ -1901,7 +1904,7 @@ void Appl::CurrentFunctions(unsigned referenceTime)
     // Verzögerungszeiten der Auswertung neu setzen
     if (RelState)
     {
-     ChannelStates[chno].CFContCloseBlanking = max(ReadChConfigByte(chno, APP_CURREVADELAY_O)*RMSCURRENTVALUESPERSECOND, RMSCURRENTVALUESPERSECOND)+1;
+     ChannelStates[chno].CFContCloseBlanking = std::max(ReadChConfigByte(chno, APP_CURREVADELAY_O)*RMSCURRENTVALUESPERSECOND, RMSCURRENTVALUESPERSECOND)+1;
      //ChannelStates[chno].CFContFailBlanking = 0;
     } else {
      ChannelStates[chno].CFContCloseBlanking = RMSCURRENTVALUESPERSECOND+1;

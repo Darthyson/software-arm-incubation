@@ -18,10 +18,13 @@
  *          Getestet mit -O3
  */
 
-#include <math.h>
 #include <sblib/platform.h>
 #include <config.h>
 #include <AdcIsr.h>
+
+#include <algorithm>
+#include <cmath>
+
 
 #if (BUFSIZE*8) > 32767
 #error BUFSIZE*8 too great for data type of IsrData.OffsIntegral!
@@ -523,7 +526,7 @@ void AdcIsrCurrFilt(void)
      Square((float)MAXCURRHIGHRANGE/512/32768);
   }
   ChCurr += IsrData.CurrSqrVals[ChIdx][0];
-  IsrData.CurrentVal[ChIdx] = sqrt(ChCurr * (0.25f / (float)BUFSIZE)); // Strom in A
+  IsrData.CurrentVal[ChIdx] = sqrtf(ChCurr * (0.25f / (float)BUFSIZE)); // Strom in A
  }
 }
 
@@ -539,16 +542,16 @@ void AdcIsrProcOffset(void)
   if ((IsrData.RegOvr[ChIdx]) < OFSCOMPOVRLIM)
   {
    //IsrData.OffsIntegral[ChIdx] += IsrData.RegSum[ChIdx];
-   IsrData.OffsIntegral[ChIdx] = min(max(IsrData.OffsIntegral[ChIdx] + IsrData.RegSum[ChIdx], -BUFSIZE*8), BUFSIZE*8);
+   IsrData.OffsIntegral[ChIdx] = std::min(std::max(IsrData.OffsIntegral[ChIdx] + IsrData.RegSum[ChIdx], -BUFSIZE*8), BUFSIZE*8);
    if (IsrData.OffsIntegral[ChIdx] > (BUFSIZE*4))
    {
     IsrData.OffsIntegral[ChIdx] -= (BUFSIZE*4);
-    IsrData.Offs[ChIdx] = min(IsrData.Offs[ChIdx]+1, OFSCOMPHIGHLIM);
+    IsrData.Offs[ChIdx] = std::min(IsrData.Offs[ChIdx]+1, OFSCOMPHIGHLIM);
    }
    if (IsrData.OffsIntegral[ChIdx] < (-BUFSIZE*4))
    {
     IsrData.OffsIntegral[ChIdx] += (BUFSIZE*4);
-    IsrData.Offs[ChIdx] = max(IsrData.Offs[ChIdx]-1, OFSCOMPLOWLIM);
+    IsrData.Offs[ChIdx] = std::max(IsrData.Offs[ChIdx]-1, OFSCOMPLOWLIM);
    }
   }
  }

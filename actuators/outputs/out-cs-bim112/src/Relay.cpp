@@ -15,6 +15,8 @@
 #include <AdcIsr.h>
 #include <Appl.h>
 
+#include <algorithm>
+
 Relay relay;
 
 #ifdef RELAYUSEISR
@@ -455,7 +457,7 @@ bool Relay::IsOperating(void)
  */
 bool Relay::BusVoltageFailRailLevel(void)
 {
- int zw = max(GetBusVoltage() - ADCRAILVOLTAGELOSS, 0);
+ int zw = std::max(GetBusVoltage() - ADCRAILVOLTAGELOSS, 0U);
  return ((unsigned)(zw*zw) < (SingleSwitchEnergy*__builtin_popcount(BusVFailMask)+ADC12VOLTSQR));
 }
 
