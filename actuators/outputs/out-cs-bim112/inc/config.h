@@ -11,7 +11,8 @@
 #ifndef CONFIG_H_
 #define CONFIG_H_
 
-#include <sblib/core.h>
+#include <sblib/digital_pin.h>
+#include <sblib/timer.h>
 /*
  * Project:
  * out-cs-bim112

@@ -11,6 +11,7 @@
  */
 
 #include <sblib/platform.h>
+#include <sblib/interrupt.h>
 #include <RelSpi.h>
 #include <Relay.h>
 #include <AdcIsr.h>
