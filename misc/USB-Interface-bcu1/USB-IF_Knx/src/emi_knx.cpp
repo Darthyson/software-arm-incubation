@@ -8,15 +8,16 @@
  *  published by the Free Software Foundation.
  */
 
-#include <sblib/digital_pin.h>
-#include <sblib/eib/knx_lpdu.h>
-#include <sblib/eib/userRam.h>
-#include <sblib/eib/bus.h>
+#include "emi_knx.h"
 #include "error_handler.h"
 #include "knxusb_const.h"
 #include "GenFifo.h"
 #include "BufferMgr.h"
-#include "emi_knx.h"
+#include <sblib/digital_pin.h>
+#include <sblib/eib/knx_lpdu.h>
+#include <sblib/eib/userRam.h>
+#include <sblib/eib/bus.h>
+#include <sblib/bits.h>
 
 
 #define ACTLED_HPRD 10
