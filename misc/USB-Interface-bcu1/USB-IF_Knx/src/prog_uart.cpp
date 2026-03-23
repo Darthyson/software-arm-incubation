@@ -148,7 +148,8 @@ bool ProgUart::isValidUUEncoding(uint8_t * buffer, uint32_t length)
 {
     for (uint32_t i = 0; i < length; i ++)
     {
-        if ((buffer[i] == 0x0d) || // line feed
+        if ((buffer[i] == 0x0a) || // line feed
+            (buffer[i] == 0x0d) || // carriage return
             (buffer[i] == '\e')||  // <ESC> escape
             (buffer[i] == 'y') ||  // lower case letters of Synchronized
             (buffer[i] == 'n') ||
@@ -468,6 +469,7 @@ TProgUartErr ProgUart::TransmitBuffer(int buffno)
     txlen = len;
     txbuffno = buffno;
     timer.interrupts();
+    ///\todo With any other timer than Timer32_0, the hardcoded interrupt service routine TIMER32_0_IRQHandler will never fire.
     NVIC_SetPendingIRQ((IRQn_Type) (TIMER_16_0_IRQn + timerNum));
 
     return TProgUartErr::Ok;

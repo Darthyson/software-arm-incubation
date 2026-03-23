@@ -76,7 +76,8 @@ private:
      * @return true if the buffer is valid UUencoded data, false otherwise.
      *
      * @note The following characters are explicitly ignored during validation:
-     *       - Line feed (0x0d)
+     *       - Line feed (0x0a)
+     *       - Carriage Return (0x0d)
      *       - Escape character (<ESC>)
      *       - Lower case letters of the word "Synchronized"
      */
