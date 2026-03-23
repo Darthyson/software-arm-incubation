@@ -41,12 +41,12 @@ protected:
     int txbitcnt;
     uint8_t rxbyte;
     uint8_t txbyte;
-    int txbuffno;
-    int rxbuffno;
-    uint8_t *txptr;
-    uint8_t *rxptr;
-    int txlen;
-    int rxlen;
+    volatile int txbuffno;
+    volatile int rxbuffno;
+    uint8_t *volatile txptr;
+    uint8_t *volatile rxptr;
+    volatile int txlen;
+    volatile int rxlen;
 
     int IspEnPin;
     int IspRstPin;
