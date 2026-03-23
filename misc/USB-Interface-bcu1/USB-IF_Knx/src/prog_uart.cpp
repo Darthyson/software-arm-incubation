@@ -278,11 +278,11 @@ void ProgUart::timerInterruptHandler()
         else
         {
             // Buffer wurde versendet
-            timer.captureMode(tx_matchCh, DISABLE);
+            timer.matchMode(tx_matchCh, DISABLE);
             // Buffer kann für Bestätigungsantwort verwendet werden
             txptr = buffmgr.buffptr(txbuffno);
             *txptr++ = C_Dev_Packet_Length;
-            txptr++;
+            *txptr++ = 0; // checksum is not used
             *txptr++ = C_HRH_IdDev;
             *txptr++ = C_Dev_Isp;
             *txptr++ = 0;
@@ -339,6 +339,7 @@ void ProgUart::timerInterruptHandler()
             }
             else
             {
+                rxbyte = 0; // clear faulty byte (incorrect stop bit)
                 failHardInDebug();
             }
             timer.matchMode(rx_matchCh, DISABLE);
@@ -404,6 +405,10 @@ void ProgUart::timerInterruptHandler()
             *rxptr++ = rxbyte;
             rxlen++;
         }
+        else
+        {
+            failHardInDebug();
+        }
         rxbyte = 0;
     }
 
@@ -440,7 +445,7 @@ TProgUartErr ProgUart::TransmitBuffer(int buffno)
 
     uint8_t *ptr = buffmgr.buffptr(buffno);
     uint8_t len = *ptr;
-    if ((len < 2) || (len > 67))
+    if ((len < 3) || (len > 67))
     {
         failHardInDebug();
         return TProgUartErr::Error;
