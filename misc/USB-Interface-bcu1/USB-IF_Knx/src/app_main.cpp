@@ -21,7 +21,7 @@
 #include "prog_uart.h"
 
 BCU1 bcu = BCU1();
-ProgUart proguart(timer32_0, TIMER32_0, PIO2_9, PIO0_11, CAP0, MAT0, MAT3, PIO1_10, PIO0_8);
+ProgUart proguart(timer32_0, TIMER32_0, PIO2_9, PIO0_11, CAP0, TIMER_MATCH_MAT0, TIMER_MATCH_MAT3, PIO1_10, PIO0_8);
 EmiKnxIf * emiknxif = nullptr;
 DeviceManagement * devicemgnt = nullptr;
 

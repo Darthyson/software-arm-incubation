@@ -197,11 +197,11 @@
 #define RelPwmTmr    timer32_0 // Relay PWM timer (16 or 32 bit)     // DEBUG timer32_1
 #define PIORELPWM    PIO1_6    // Relay PWM output pin               // DEBUG PIO1_2
 // PIO1_6 is connected to CT32B0_MAT0, so it can be used as PWM output via counter MAT0.
-// An different counter has to be assigned as period generator. Here MAT1 is selected.
+// An different counter has to be assigned as period generator. Here TIMER_MATCH_MAT1 is selected.
 // PIO1_6 ist verbunden mit CT32B0_MAT0, kann also als PWM Ausgang ueber den Zaehler MAT0 verwendet werden.
-// Ein anderer Zähler muss die Funktion des Periodengenerators uebernehmen, hier frei gewaehlt: MAT1
-#define RELPWMPRDCH  MAT1      // Relay PWM timer period channel     // DEBUG MAT0
-#define RELPWMDCCH   MAT0      // Relay PWM timer duty cycle channel // DEBUG MAT1
+// Ein anderer Zähler muss die Funktion des Periodengenerators uebernehmen, hier frei gewaehlt: TIMER_MATCH_MAT1
+#define RELPWMPRDCH  TIMER_MATCH_MAT1 // Relay PWM timer period channel     // DEBUG TIMER_MATCH_MAT0
+#define RELPWMDCCH   TIMER_MATCH_MAT0 // Relay PWM timer duty cycle channel // DEBUG TIMER_MATCH_MAT1
 
 /*
  * SPI-Interface
