@@ -155,10 +155,10 @@ void SmokeDetectorApp::setupPeriodicTimer(uint32_t milliseconds)
     timer32_0.prescaler((SystemCoreClock / 1000) - 1);
 
     // On match of MAT1, generate an interrupt and reset the timer
-    timer32_0.matchMode(MAT1, RESET | INTERRUPT);
+    timer32_0.matchMode(TIMER_MATCH_MAT1, RESET | INTERRUPT);
 
     // Match MAT1 when the timer reaches this value (in milliseconds)
-    timer32_0.match(MAT1, milliseconds - 1); // -1 because counting starts from 0, e.g. 0-999=1000ms
+    timer32_0.match(TIMER_MATCH_MAT1, milliseconds - 1); // -1 because counting starts from 0, e.g. 0-999=1000ms
 
     timer32_0.start();
 }

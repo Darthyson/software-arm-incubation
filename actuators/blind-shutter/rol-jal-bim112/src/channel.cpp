@@ -26,12 +26,12 @@ void Channel::initPWM(int PWMPin)
     pinMode(PWMPin, OUTPUT_MATCH);       // configure digital pin PWMPin to match MAT2 of PWMTimer
     TIMER_PWM.begin();
     TIMER_PWM.prescaler((SystemCoreClock / 100000) - 1);
-    TIMER_PWM.matchMode(MAT2, SET);      // set the output of PWMPin to 1 when the timer matches MAT2
-    TIMER_PWM.match(MAT2, PWM_DUTY);     // match MAT2 when the timer reaches this value
-    TIMER_PWM.pwmEnable(MAT2);           // enable PWM for match channel MAT2
+    TIMER_PWM.matchMode(TIMER_MATCH_MAT2, SET);      // set the output of PWMPin to 1 when the timer matches MAT2
+    TIMER_PWM.match(TIMER_MATCH_MAT2, PWM_DUTY);     // match MAT2 when the timer reaches this value
+    TIMER_PWM.pwmEnable(TIMER_MATCH_MAT2);           // enable PWM for match channel MAT2
 
-    TIMER_PWM.matchMode(MAT3, RESET);    // Reset the timer when the timer matches MAT3
-    TIMER_PWM.match(MAT3, PWM_PERIOD);   // match MAT3 to create 14lHz
+    TIMER_PWM.matchMode(TIMER_MATCH_MAT3, RESET);    // Reset the timer when the timer matches MAT3
+    TIMER_PWM.match(TIMER_MATCH_MAT3, PWM_PERIOD);   // match MAT3 to create 14lHz
 
     Channel::startPWM();                 // start PWM
 }
@@ -41,8 +41,8 @@ void Channel::initPWM(int PWMPin)
  */
 void Channel::startPWM()
 {
-    TIMER_PWM.match(MAT2, PWM_DUTY);  // match MAT2 when the timer reaches this value
-    TIMER_PWM.pwmEnable(MAT2);        // enable PWM for match channel MAT2
+    TIMER_PWM.match(TIMER_MATCH_MAT2, PWM_DUTY);  // match MAT2 when the timer reaches this value
+    TIMER_PWM.pwmEnable(TIMER_MATCH_MAT2);        // enable PWM for match channel MAT2
     TIMER_PWM.start();
 }
 
@@ -51,7 +51,7 @@ void Channel::startPWM()
  */
 void Channel::setPWMtoMaxDuty()
 {
-    TIMER_PWM.match(MAT2, PWM_DUTY_MAX);  // match MAT2 when the timer reaches this value
+    TIMER_PWM.match(TIMER_MATCH_MAT2, PWM_DUTY_MAX);  // match MAT2 when the timer reaches this value
 }
 
 Channel::Channel(uint8_t newNumber, uint32_t newAddress, uint16_t newPosition)

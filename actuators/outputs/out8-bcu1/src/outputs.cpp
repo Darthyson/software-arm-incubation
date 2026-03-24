@@ -32,13 +32,13 @@ void Outputs::begin(unsigned int initial, unsigned int inverted, unsigned int ch
     timer16_0.begin();
 
     timer16_0.prescaler((SystemCoreClock / 100000) - 1);
-    timer16_0.matchMode(MAT2, SET);  // set the output of PIO3_2 to 1 when the timer matches MAT1
-    timer16_0.match(MAT2, PWM_DUTY);        // match MAT1 when the timer reaches this value
-    timer16_0.pwmEnable(MAT2);       // enable PWM for match channel MAT1
+    timer16_0.matchMode(TIMER_MATCH_MAT2, SET);  // set the output of PIO3_2 to 1 when the timer matches MAT1
+    timer16_0.match(TIMER_MATCH_MAT2, PWM_DUTY);        // match MAT1 when the timer reaches this value
+    timer16_0.pwmEnable(TIMER_MATCH_MAT2);       // enable PWM for match channel MAT1
 
     // Reset the timer when the timer matches MAT3
-    timer16_0.matchMode(MAT3, RESET);
-    timer16_0.match(MAT3, PWM_PERIOD);     // match MAT3 to create 14lHz
+    timer16_0.matchMode(TIMER_MATCH_MAT3, RESET);
+    timer16_0.match(TIMER_MATCH_MAT3, PWM_PERIOD);     // match MAT3 to create 14lHz
     timer16_0.start();
     _pwm_timeout.start(PWM_TIMEOUT); // start the timer to switch back to a PWM operation
 #endif
@@ -57,12 +57,12 @@ void Outputs::begin(unsigned int initial, unsigned int inverted, unsigned int ch
     _port_0_set = _port_0_clr = _port_2_set = _port_2_clr = 0;
     timer32_0.begin();
     timer32_0.prescaler((SystemCoreClock / 100000) - 1);
-    timer32_0.matchMode(MAT3, RESET | STOP);
-    timer32_0.matchMode(MAT0, INTERRUPT);
-    timer32_0.matchMode(MAT1, INTERRUPT);
-    timer32_0.match(MAT0, zeroDetectSetDelay);
-    timer32_0.match(MAT1, zeroDetectClrDelay);
-    timer32_0.match(MAT3, ZD_RESET);
+    timer32_0.matchMode(TIMER_MATCH_MAT3, RESET | STOP);
+    timer32_0.matchMode(TIMER_MATCH_MAT0, INTERRUPT);
+    timer32_0.matchMode(TIMER_MATCH_MAT1, INTERRUPT);
+    timer32_0.match(TIMER_MATCH_MAT0, zeroDetectSetDelay);
+    timer32_0.match(TIMER_MATCH_MAT1, zeroDetectClrDelay);
+    timer32_0.match(TIMER_MATCH_MAT3, ZD_RESET);
     timer32_0.interrupts();
 #endif
 }
@@ -103,7 +103,7 @@ unsigned int Outputs::updateOutput(unsigned int channel)
     if (value)
     {
         // output needs to be switched ON -> disable the PWM
-        timer16_0.match(MAT2, PWM_PERIOD);
+        timer16_0.match(TIMER_MATCH_MAT2, PWM_PERIOD);
         _pwm_timeout.start(PWM_TIMEOUT);
         result = true;
     }

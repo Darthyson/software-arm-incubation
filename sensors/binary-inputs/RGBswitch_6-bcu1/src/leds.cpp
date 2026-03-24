@@ -348,10 +348,10 @@ void initLEDs() {
 	timer32_0.prescaler((SystemCoreClock / 1000) - 1);
 
 	// On match of MAT0, generate an interrupt and reset the timer
-	timer32_0.matchMode(MAT0, RESET | INTERRUPT);
+	timer32_0.matchMode(TIMER_MATCH_MAT0, RESET | INTERRUPT);
 
 	// Match MAT0 when the timer reaches this value (in milliseconds)
-	timer32_0.match(MAT0, TIMER32_0_STEP); //10ms period
+	timer32_0.match(TIMER_MATCH_MAT0, TIMER32_0_STEP); //10ms period
 
 	// set Timer priority lower than normal, because sblib interrupts have to be served with highest priority (prio = 0)
 	NVIC_SetPriority(TIMER_32_0_IRQn, 1);

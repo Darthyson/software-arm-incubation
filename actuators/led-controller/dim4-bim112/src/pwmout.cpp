@@ -26,11 +26,11 @@ void pwmout::begin(int ch) {
 //		pinMode(PIO3_0, OUTPUT_MATCH);  // configure digital pin PIO3_0 to match MAT0 of timer16 #0  TS_ARM IO6
 //		timer16_0.begin();
 //		timer16_0.prescaler(PRESCALER);
-//		timer16_0.matchMode(MAT0, SET);  // set the output of PIO3_0 to 1 when the timer matches MAT0
-//		timer16_0.match(MAT0, pwmmax);      // match MAT0 when the timer reaches this value
-//		timer16_0.pwmEnable(MAT0);       // enable PWM for match channel MAT0
-//		timer16_0.matchMode(MAT3, RESET | INTERRUPT);	// Reset the timer when the timer matches MAT3 and generate an interrupt
-//		timer16_0.match(MAT3, pwmmax);
+//		timer16_0.matchMode(TIMER_MATCH_MAT0, SET);  // set the output of PIO3_0 to 1 when the timer matches MAT0
+//		timer16_0.match(TIMER_MATCH_MAT0, pwmmax);      // match MAT0 when the timer reaches this value
+//		timer16_0.pwmEnable(TIMER_MATCH_MAT0);       // enable PWM for match channel MAT0
+//		timer16_0.matchMode(TIMER_MATCH_MAT3, RESET | INTERRUPT);	// Reset the timer when the timer matches MAT3 and generate an interrupt
+//		timer16_0.match(TIMER_MATCH_MAT3, pwmmax);
 //	    timer16_0.start();
 		isactive = true;
 		return;
@@ -39,11 +39,11 @@ void pwmout::begin(int ch) {
 		pinMode(PIO3_1, OUTPUT_MATCH);  // configure digital pin PIO3_1 to match MAT1 of timer16 #0  TS_ARM IO7
 		timer16_0.begin();
 		timer16_0.prescaler(PRESCALER);
-	    timer16_0.matchMode(MAT1, SET);  // set the output of PIO3_1 to 1 when the timer matches MAT1
-	    timer16_0.match(MAT1, pwmmax);      // match MAT1 when the timer reaches this value
-	    timer16_0.pwmEnable(MAT1);       // enable PWM for match channel MAT1
-	    timer16_0.matchMode(MAT3, RESET | INTERRUPT);	// Reset the timer when the timer matches MAT3 and generate an interrupt
-	    timer16_0.match(MAT3, pwmmax);
+	    timer16_0.matchMode(TIMER_MATCH_MAT1, SET);  // set the output of PIO3_1 to 1 when the timer matches MAT1
+	    timer16_0.match(TIMER_MATCH_MAT1, pwmmax);      // match MAT1 when the timer reaches this value
+	    timer16_0.pwmEnable(TIMER_MATCH_MAT1);       // enable PWM for match channel MAT1
+	    timer16_0.matchMode(TIMER_MATCH_MAT3, RESET | INTERRUPT);	// Reset the timer when the timer matches MAT3 and generate an interrupt
+	    timer16_0.match(TIMER_MATCH_MAT3, pwmmax);
 	    timer16_0.start();
 	    isactive = true;
 	    return;
@@ -52,11 +52,11 @@ void pwmout::begin(int ch) {
 		pinMode(PIO1_1, OUTPUT_MATCH);  // configure digital pin PIO1_1 to match MAT0 of timer32 #1  TS_ARM IO5
 		timer32_1.begin();
 	    timer32_1.prescaler(PRESCALER); //
-	    timer32_1.matchMode(MAT0, SET);  // set the output of PIO1_1 to 1 when the timer matches MAT0
-	    timer32_1.match(MAT0, pwmmax);      // match MAT0 when the timer reaches this value
-	    timer32_1.pwmEnable(MAT0);       // enable PWM for match channel MAT0
-	    timer32_1.matchMode(MAT3, RESET | INTERRUPT);	// Reset the timer when the timer matches MAT3 and generate an interrupt
-	    timer32_1.match(MAT3, pwmmax);
+	    timer32_1.matchMode(TIMER_MATCH_MAT0, SET);  // set the output of PIO1_1 to 1 when the timer matches MAT0
+	    timer32_1.match(TIMER_MATCH_MAT0, pwmmax);      // match MAT0 when the timer reaches this value
+	    timer32_1.pwmEnable(TIMER_MATCH_MAT0);       // enable PWM for match channel MAT0
+	    timer32_1.matchMode(TIMER_MATCH_MAT3, RESET | INTERRUPT);	// Reset the timer when the timer matches MAT3 and generate an interrupt
+	    timer32_1.match(TIMER_MATCH_MAT3, pwmmax);
 	    timer32_1.start();
 	    isactive = true;
 	    return;
@@ -65,11 +65,11 @@ void pwmout::begin(int ch) {
 		pinMode(PIO1_2, OUTPUT_MATCH);  // configure digital pin PIO1_2 to match MAT1 of timer32 #1  TS_ARM IO14
 	    timer32_1.begin();
 	    timer32_1.prescaler(PRESCALER); //
-	    timer32_1.matchMode(MAT1, SET);  // set the output of PIO1_2 to 1 when the timer matches MAT1
-	    timer32_1.match(MAT1, pwmmax);      // match MAT1 when the timer reaches this value
-	    timer32_1.pwmEnable(MAT1);       // enable PWM for match channel MAT1
-	    timer32_1.matchMode(MAT3, RESET | INTERRUPT);	// Reset the timer when the timer matches MAT3 and generate an interrupt
-	    timer32_1.match(MAT3, pwmmax);
+	    timer32_1.matchMode(TIMER_MATCH_MAT1, SET);  // set the output of PIO1_2 to 1 when the timer matches MAT1
+	    timer32_1.match(TIMER_MATCH_MAT1, pwmmax);      // match MAT1 when the timer reaches this value
+	    timer32_1.pwmEnable(TIMER_MATCH_MAT1);       // enable PWM for match channel MAT1
+	    timer32_1.matchMode(TIMER_MATCH_MAT3, RESET | INTERRUPT);	// Reset the timer when the timer matches MAT3 and generate an interrupt
+	    timer32_1.match(TIMER_MATCH_MAT3, pwmmax);
 	    timer32_1.start();
 	    isactive = true;
 	    return;
@@ -96,16 +96,16 @@ void pwmout::setpwm(int value) {
 		switch (channel) {
 			//int val = value*pwmmax/MAXVALUE;
 			case 0:
-				//timer16_0.match(MAT0, pwmmax-(value*pwmmax/MAXOUTPUTVALUE));      // match MAT0 when the timer reaches this value
+				//timer16_0.match(TIMER_MATCH_MAT0, pwmmax-(value*pwmmax/MAXOUTPUTVALUE));      // match MAT0 when the timer reaches this value
 				break;
 			case 1:
-				timer16_0.match(MAT1, pwmmax-(value*pwmmax/MAXOUTPUTVALUE));      // match MAT1 when the timer reaches this value
+				timer16_0.match(TIMER_MATCH_MAT1, pwmmax-(value*pwmmax/MAXOUTPUTVALUE));      // match MAT1 when the timer reaches this value
 				break;
 			case 2:
-				timer32_1.match(MAT0, pwmmax-(value*pwmmax/MAXOUTPUTVALUE));      // match MAT0 when the timer reaches this value
+				timer32_1.match(TIMER_MATCH_MAT0, pwmmax-(value*pwmmax/MAXOUTPUTVALUE));      // match MAT0 when the timer reaches this value
 				break;
 			case 3:
-				timer32_1.match(MAT1, pwmmax-(value*pwmmax/MAXOUTPUTVALUE));      // match MAT1 when the timer reaches this value
+				timer32_1.match(TIMER_MATCH_MAT1, pwmmax-(value*pwmmax/MAXOUTPUTVALUE));      // match MAT1 when the timer reaches this value
 				break;
 			default:
 				break;

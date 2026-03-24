@@ -14,7 +14,7 @@ uint16_t currentPwmValue = 0;
 /*extern "C" void TIMER16_0_IRQHandler()
 {
 	uint32_t now = millis();
-	timer16_0.resetFlag(MAT0);
+	timer16_0.resetFlag(TIMER_MATCH_MAT0);
 	currentPwmValue++;
 	if (currentPwmValue == 2048)
 	{
@@ -42,19 +42,19 @@ PWMPin::PWMPin(byte firstComIndex, PWMPinConfig* config, GenericItem* parent, ui
 		NVIC_SetPriority(TIMER_16_0_IRQn, 3);
 		timer16_0.begin();
 		timer16_0.prescaler(937);
-		timer16_0.matchMode(MAT0, INTERRUPT | RESET);
-		timer16_0.matchMode(MAT1, DISABLE);
-		timer16_0.matchMode(MAT2, DISABLE);
-		timer16_0.matchMode(MAT3, DISABLE);
-		timer16_0.captureMode(MAT0, DISABLE);
-		timer16_0.captureMode(MAT1, DISABLE);
-		timer16_0.captureMode(MAT2, DISABLE);
-		timer16_0.captureMode(MAT3, DISABLE);
-		timer16_0.pwmDisable(MAT0);
-		timer16_0.pwmDisable(MAT1);
-		timer16_0.pwmDisable(MAT2);
-		timer16_0.pwmDisable(MAT3);
-		timer16_0.match(MAT0, 1);
+		timer16_0.matchMode(TIMER_MATCH_MAT0, INTERRUPT | RESET);
+		timer16_0.matchMode(TIMER_MATCH_MAT1, DISABLE);
+		timer16_0.matchMode(TIMER_MATCH_MAT2, DISABLE);
+		timer16_0.matchMode(TIMER_MATCH_MAT3, DISABLE);
+		timer16_0.captureMode(TIMER_MATCH_MAT0, DISABLE);
+		timer16_0.captureMode(TIMER_MATCH_MAT1, DISABLE);
+		timer16_0.captureMode(TIMER_MATCH_MAT2, DISABLE);
+		timer16_0.captureMode(TIMER_MATCH_MAT3, DISABLE);
+		timer16_0.pwmDisable(TIMER_MATCH_MAT0);
+		timer16_0.pwmDisable(TIMER_MATCH_MAT1);
+		timer16_0.pwmDisable(TIMER_MATCH_MAT2);
+		timer16_0.pwmDisable(TIMER_MATCH_MAT3);
+		timer16_0.match(TIMER_MATCH_MAT0, 1);
 		timer16_0.interrupts();
 		timer16_0.start();
 	}*/

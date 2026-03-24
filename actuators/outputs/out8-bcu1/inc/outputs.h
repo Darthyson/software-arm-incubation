@@ -167,7 +167,7 @@ ALWAYS_INLINE void Outputs::checkPWM(void)
 {
     if(_pwm_timeout.expired())
     {
-        timer16_0.match(MAT2, PWM_DUTY);
+        timer16_0.match(TIMER_MATCH_MAT2, PWM_DUTY);
         //digitalWrite(PIO1_4, 0);
     }
 }
@@ -188,7 +188,7 @@ ALWAYS_INLINE void Outputs::setOutputs(void)
 {
     if (_port_0_set || _port_2_set)
     {   // at least one port will be switched on
-        timer16_0.match(MAT2, PWM_PERIOD);// disable the PWM
+        timer16_0.match(TIMER_MATCH_MAT2, PWM_PERIOD);// disable the PWM
         _pwm_timeout.start(PWM_TIMEOUT);
     }
 #ifdef __LPC11XX__
