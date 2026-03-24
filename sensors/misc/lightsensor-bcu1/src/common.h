@@ -10,7 +10,7 @@
 #include <sblib/i2c/bh1750.h>
 
 #ifdef LOGGING
-    #include "log/logger.h"
+    #include <logger.h>
     #define pretty(val) (int)(val*1)
     #define LOG(...) serPrintf(__VA_ARGS__)
 #else
