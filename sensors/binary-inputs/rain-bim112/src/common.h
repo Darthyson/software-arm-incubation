@@ -8,7 +8,7 @@
 #include <stdint.h>
 
 #ifdef LOGGING
-    #include "log/logger.h"
+    #include <logger.h>
     #define LOG(...) serPrintf(__VA_ARGS__)
 #else
     #define LOG(...) // nada!
