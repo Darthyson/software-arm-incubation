@@ -4,6 +4,7 @@
 	<comment></comment>
 	<projects>
 		<project>CMSIS_CORE_LPC11xx</project>
+		<project>logger</project>
 		<project>sblib</project>
 	</projects>
 	<buildSpec>
@@ -32,13 +33,6 @@
 		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
 		<nature>org.eclipse.xtext.ui.shared.xtextNature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>src/log</name>
-			<type>2</type>
-			<locationURI>PARENT-4-PROJECT_LOC/software-arm-lib/logging/log</locationURI>
-		</link>
-	</linkedResources>
 	<filteredResources>
 		<filter>
 			<id>1595008670851</id>
@@ -50,10 +44,4 @@
 			</matcher>
 		</filter>
 	</filteredResources>
-	<variableList>
-		<variable>
-			<name>sbloc</name>
-			<value>file:/C:/d2/hm/mario/data/projects/electronic/mybus</value>
-		</variable>
-	</variableList>
 </projectDescription>
