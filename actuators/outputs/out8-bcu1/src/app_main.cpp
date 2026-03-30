@@ -211,7 +211,7 @@ BcuBase* setup()
 #endif
 
 #ifdef DEBUG_SERIAL
-    int physicalAddress = bus.ownAddress();
+    int physicalAddress = bcu.ownAddress();
     serial.print("physical address: ", (physicalAddress >> 12) & 0x0F, DEC);
     serial.print(".", (physicalAddress >> 8) & 0x0F, DEC);
     serial.println(".", physicalAddress & 0xFF, DEC);
