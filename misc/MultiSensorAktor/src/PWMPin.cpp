@@ -39,7 +39,7 @@ PWMPin::PWMPin(byte firstComIndex, PWMPinConfig* config, GenericItem* parent, ui
 
 /*	if (firstPwmPin == nullptr)
 	{
-		NVIC_SetPriority(TIMER_16_0_IRQn, 3);
+		setInterruptPriority(TIMER_16_0_IRQn, InterruptPriority::low);
 		timer16_0.begin();
 		timer16_0.prescaler(937);
 		timer16_0.matchMode(TIMER_MATCH_MAT0, INTERRUPT | RESET);

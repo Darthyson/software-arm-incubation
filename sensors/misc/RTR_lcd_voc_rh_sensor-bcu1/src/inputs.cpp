@@ -37,8 +37,8 @@ void init_inputs(void){
 	enableInterrupt(EINT2_IRQn);
 
 	// set Timer priority lower than normal, because sblib interrupts have to be served with highest priority (prio = 0)
-	NVIC_SetPriority(EINT1_IRQn, 1);
-	NVIC_SetPriority(EINT2_IRQn, 1);
+	setInterruptPriority(EINT1_IRQn, InterruptPriority::high);
+	setInterruptPriority(EINT2_IRQn, InterruptPriority::high);
 }
 
 // Interrupt für PIO1_7

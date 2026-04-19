@@ -483,7 +483,7 @@ void IsrSetup(void)
  }
  IsrData.UAccu[0] = 0;
  IsrData.UAccu[1] = 0;
- NVIC_SetPriority(ADC_IRQn, 1); // Das sollte für erhöhte Interruptpriorität sorgen
+ setInterruptPriority(ADC_IRQn, InterruptPriority::high); // Das sollte für erhöhte Interruptpriorität sorgen
  NVIC_EnableIRQ(ADC_IRQn);
 }
 

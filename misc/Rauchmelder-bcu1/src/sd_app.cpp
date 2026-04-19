@@ -75,7 +75,7 @@ BcuBase* SmokeDetectorApp::initialize()
 
     // Set GPIO port 0 interrupt's priority lower then Bus timer interrupt and enable it
     // DevicePowered pin (3.3V supply) of smoke detector is connected to port 0
-    NVIC_SetPriority(EINT0_IRQn, 1);
+    setInterruptPriority(EINT0_IRQn, InterruptPriority::high);
     NVIC_EnableIRQ(EINT0_IRQn);
     return (&bcu);
 }
@@ -149,7 +149,7 @@ void SmokeDetectorApp::setupPeriodicTimer(uint32_t milliseconds)
     timer32_0.begin();
 
     // Smoke detector timer is important, but less important than the Bus timer.
-    timer32_0.setIRQPriority(1);
+    timer32_0.setIRQPriority(InterruptPriority::high);
 
     // Let the timer count milliseconds
     timer32_0.prescaler((SystemCoreClock / 1000) - 1);

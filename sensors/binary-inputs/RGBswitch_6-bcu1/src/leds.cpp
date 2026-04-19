@@ -354,7 +354,7 @@ void initLEDs() {
 	timer32_0.match(TIMER_MATCH_MAT0, TIMER32_0_STEP); //10ms period
 
 	// set Timer priority lower than normal, because sblib interrupts have to be served with highest priority (prio = 0)
-	NVIC_SetPriority(TIMER_32_0_IRQn, 1);
+	setInterruptPriority(TIMER_32_0_IRQn, InterruptPriority::high);
 
 	timer32_0.start();
 

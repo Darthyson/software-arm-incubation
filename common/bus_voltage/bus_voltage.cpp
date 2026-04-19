@@ -183,7 +183,7 @@ void BusVoltage::isrSetup()
     isrFailedFirstSysTick = 0;
     isrReturnedFirstSysTick = 0;
     isrBusVoltageState = BusVoltage::UNKNOWN;
-    NVIC_SetPriority(ADC_IRQn, 3); // set lowest priority for AD interrupt
+    setInterruptPriority(ADC_IRQn, InterruptPriority::low); // set lowest priority for AD interrupt
     enableInterrupt(ADC_IRQn);
 }
 

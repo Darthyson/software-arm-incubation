@@ -82,7 +82,7 @@ void ProgUart::initialize()
 void ProgUart::EnableUart(void)
 {
     initialize();
-    timer.setIRQPriority(0); // ensure highest IRQ-priority for the uart timer
+    timer.setIRQPriority(InterruptPriority::highest); // ensure highest IRQ-priority for the uart timer
     timer.begin();
     timer.captureMode(rx_captureCh, FALLING_EDGE | INTERRUPT);
     timer.start();
