@@ -20,7 +20,7 @@
 
 #define FT_OWN_KNX_ADDRESS          (0x11fe) //!< Our own knx-address: 1.1.254
 #define FT_FRAME_SIZE               (32)     //!< Maximum size of FT1.2 frames
-#define FT_BAUDRATE                 (19200)  //!< Ft12 baudrate
+#define FT_BAUDRATE                 SERIAL_BAUD_RATE_19200 //!< Ft12 baudrate
 
 
 
