@@ -17,7 +17,7 @@
 class PCA9555DItem : public GenericItem
 {
 public:
-	PCA9555DItem(byte firstComIndex, PCA9555DConfig* config, GenericItem* nextItem, uint16_t& objRamPointer);
+	PCA9555DItem(uint8_t firstComIndex, PCA9555DConfig* config, GenericItem* nextItem, uint16_t& objRamPointer);
 	~PCA9555DItem() = default;
 
 	void Loop(uint32_t now, int updatedObjectNo);
@@ -37,8 +37,8 @@ protected:
 
 	GenericPin* pins[16];
 
-	byte configLength;
-	byte comObjCount;
+	uint8_t configLength;
+	uint8_t comObjCount;
 };
 
 #endif /* PCA9555DITEM_H_ */

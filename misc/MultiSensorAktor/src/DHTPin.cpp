@@ -11,7 +11,7 @@
 #include <ARMPinItem.h>
 
 
-DHTPin::DHTPin(int port, byte firstComIndex, DHTConfig *config, bool dht11, uint16_t& objRamPointer) : GenericPin(firstComIndex), dht(DHT()), config(config)
+DHTPin::DHTPin(int port, uint8_t firstComIndex, DHTConfig *config, bool dht11, uint16_t& objRamPointer) : GenericPin(firstComIndex), dht(DHT()), config(config)
 {
 	if (config->PowerPin != 99)
 	{
@@ -29,7 +29,7 @@ DHTPin::DHTPin(int port, byte firstComIndex, DHTConfig *config, bool dht11, uint
 	retries = 3;
 };
 
-byte DHTPin::GetState(uint32_t now, byte updatedOjectNo)
+uint8_t DHTPin::GetState(uint32_t now, uint8_t updatedOjectNo)
 {
 	if (now >= nextAction || (now + (config->PreFan + config->PreMeasure + config->Delay) * 1000) < nextAction)
 	{
@@ -92,7 +92,7 @@ byte DHTPin::GetState(uint32_t now, byte updatedOjectNo)
 					)
 				{
 					comObjects->objectWriteFloat(firstComIndex + 1, temp);
-					comObjects->objectWrite(firstComIndex + 2, (byte*)&ftemp);
+					comObjects->objectWrite(firstComIndex + 2, (uint8_t*)&ftemp);
 					comObjects->objectWriteFloat(firstComIndex + 3, hum);
 					retries = 0;
 				}

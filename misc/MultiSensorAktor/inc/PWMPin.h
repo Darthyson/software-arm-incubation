@@ -16,10 +16,10 @@
 class PWMPin : public GenericPin
 {
 public:
-	PWMPin(byte firstComObj, PWMPinConfig *config, GenericItem* parent, uint16_t& objRamPtr);
+	PWMPin(uint8_t firstComObj, PWMPinConfig *config, GenericItem* parent, uint16_t& objRamPtr);
 	~PWMPin() = default;
 
-	byte GetState(uint32_t now, byte updatedObjectNo);
+	uint8_t GetState(uint32_t now, uint8_t updatedObjectNo);
 
 	int ConfigLength() { return sizeof(PWMPinConfig); }
 	int ComObjCount() { return 3; }
@@ -28,10 +28,10 @@ protected:
 	PWMPinConfig* config;
 	uint16_t value = 0;
 	GenericItem* parent;
-	byte freqScaler;
+	uint8_t freqScaler;
 	uint16_t freqDivider;
-	byte on;
-	byte off;
+	uint8_t on;
+	uint8_t off;
 };
 
 #endif

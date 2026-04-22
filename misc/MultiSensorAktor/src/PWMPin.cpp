@@ -29,7 +29,7 @@ uint16_t currentPwmValue = 0;
 	}
 }*/
 
-PWMPin::PWMPin(byte firstComIndex, PWMPinConfig* config, GenericItem* parent, uint16_t& objRamPointer) : GenericPin(firstComIndex), config(config), parent(parent)
+PWMPin::PWMPin(uint8_t firstComIndex, PWMPinConfig* config, GenericItem* parent, uint16_t& objRamPointer) : GenericPin(firstComIndex), config(config), parent(parent)
 {
 	comObjects->requestObjectRead(firstComIndex);
 	comObjects->requestObjectRead(firstComIndex + 1);
@@ -69,7 +69,7 @@ PWMPin::PWMPin(byte firstComIndex, PWMPinConfig* config, GenericItem* parent, ui
 	HelperFunctions::setComObjPtr(comObjects, firstComIndex + 2, BIT_1, objRamPointer);
 }
 
-byte PWMPin::GetState(uint32_t now, byte updatedObjectNo)
+uint8_t PWMPin::GetState(uint32_t now, uint8_t updatedObjectNo)
 {
 	if (updatedObjectNo > 0 && (updatedObjectNo == firstComIndex || updatedObjectNo == firstComIndex + 1))
 	{

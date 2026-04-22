@@ -9,7 +9,7 @@
 
 #include <sblib/eib/bcu_base.h>
 
-enum class BusSwitch : byte
+enum class BusSwitch : uint8_t
 {
 //	SPI0 = 0x01,
 //	SPI1 = 0x02,
@@ -21,7 +21,7 @@ inline bool operator&(BusSwitch a, BusSwitch b)
 	return static_cast<bool>(static_cast<int>(a) & static_cast<int>(b));
 }
 
-enum class SHTSwitch : byte
+enum class SHTSwitch : uint8_t
 {
 	SHT2x = 0x80,
 	SHT4x = 0x40,
@@ -37,15 +37,15 @@ inline bool operator&(SHTSwitch a, SHTSwitch b)
 struct DeviceConfig
 {
 	BusSwitch BusSwitches;
-	byte SCK0;
-	byte SCK1;
-	byte MISO1;
-	byte BH1750Count;
-	byte CCS811Count;
-	byte DS3231Count;
-	byte iAQCoreCount;
+	uint8_t SCK0;
+	uint8_t SCK1;
+	uint8_t MISO1;
+	uint8_t BH1750Count;
+	uint8_t CCS811Count;
+	uint8_t DS3231Count;
+	uint8_t iAQCoreCount;
 	SHTSwitch SHTOption;
-	byte PCA9555DCount;
+	uint8_t PCA9555DCount;
 	uint8_t PortAssignment[36];
 };
 #pragma pack()

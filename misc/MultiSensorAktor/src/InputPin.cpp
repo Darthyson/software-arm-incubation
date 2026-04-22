@@ -19,7 +19,7 @@
 
 
 
-InputPin::InputPin(byte firstComObj, InputPinConfig *config, uint16_t& objRamPointer) : GenericPin(firstComObj), config(config)
+InputPin::InputPin(uint8_t firstComObj, InputPinConfig *config, uint16_t& objRamPointer) : GenericPin(firstComObj), config(config)
 {
 	longActive = config->HiLong || config->LoLong;
 
@@ -95,7 +95,7 @@ void InputPin::PutValue(uint32_t now, int val)
     }
 }
 
-void InputPin::setObj(int idx, byte item)
+void InputPin::setObj(int idx, uint8_t item)
 {
 	switch (item)
 	{

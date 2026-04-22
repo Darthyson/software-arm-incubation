@@ -15,7 +15,7 @@
 class InputPin : public GenericPin
 {
 public:
-	InputPin(byte firstComObj, InputPinConfig *config, uint16_t& objRamPointer);
+	InputPin(uint8_t firstComObj, InputPinConfig *config, uint16_t& objRamPointer);
 	~InputPin() = default;
 
 	void PutValue(uint32_t now, int val);
@@ -24,7 +24,7 @@ public:
 	int ComObjCount() { return 3; }
 
 protected:
-	void setObj(int idx, byte item);
+	void setObj(int idx, uint8_t item);
 
 	InputPinConfig* config;
 
@@ -32,7 +32,7 @@ protected:
 	bool longActive = false;
 	bool longPending = false;
 	uint32_t valueSet = 0;
-	byte lastLongValue = 0;
+	uint8_t lastLongValue = 0;
 };
 
 #endif /* INPUTPIN_H_ */

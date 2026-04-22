@@ -13,7 +13,7 @@
 
 extern int portPins[32];
 
-SHT4xItem::SHT4xItem(byte firstComIndex, TempHumSensorConfig *config, GenericItem* nextItem, uint16_t& objRamPointer) : GenericItem(firstComIndex, nextItem), config(config), sht4x(SHT4xClass()), nextAction(0)
+SHT4xItem::SHT4xItem(uint8_t firstComIndex, TempHumSensorConfig *config, GenericItem* nextItem, uint16_t& objRamPointer) : GenericItem(firstComIndex, nextItem), config(config), sht4x(SHT4xClass()), nextAction(0)
 {
 	sht4x.init();
 	offset = dpt9ToFloat(config->Offset) * 0.01f;
@@ -62,7 +62,7 @@ void SHT4xItem::Loop(uint32_t now, int updatedObjectNo)
 				int16_t temp = (int16_t)(ftemp * 100);
 				uint16_t hum = (uint16_t)(fhum * 100);
 				comObjects->objectWriteFloat(firstComIndex + 1, temp);
-				comObjects->objectWrite(firstComIndex + 2, (byte*)&ftemp);
+				comObjects->objectWrite(firstComIndex + 2, (uint8_t*)&ftemp);
 				comObjects->objectWriteFloat(firstComIndex + 3, hum);
 			}
 			else

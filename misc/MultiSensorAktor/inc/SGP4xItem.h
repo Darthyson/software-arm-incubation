@@ -16,7 +16,7 @@
 class SGP4xItem : public GenericItem
 {
 public:
-	SGP4xItem(byte firstComIndex, TempHumSensorConfig* config, GenericItem* nextItem, uint16_t& objRamPtr);
+	SGP4xItem(uint8_t firstComIndex, TempHumSensorConfig* config, GenericItem* nextItem, uint16_t& objRamPtr);
 	~SGP4xItem() = default;
 
 	void Loop(uint32_t now, int updatedObjectNo);
@@ -27,7 +27,7 @@ protected:
 	TempHumSensorConfig *config;
 //	SGP4xClass sgp4x;
 	uint32_t nextAction = 0;
-	byte state = 0;
+	uint8_t state = 0;
 	bool configured = false;
 	uint16_t baseline = 0;
 	float temp = -100;

@@ -17,7 +17,7 @@
 
 const constexpr int ARMPinItem::PortPins[36];
 
-ARMPinItem::ARMPinItem(byte firstComIndex, byte portNumber, ARMPinConfig *config, GenericItem* nextItem, uint16_t& objRamPointer) : GenericItem(firstComIndex, nextItem), config(config)
+ARMPinItem::ARMPinItem(uint8_t firstComIndex, uint8_t portNumber, ARMPinConfig *config, GenericItem* nextItem, uint16_t& objRamPointer) : GenericItem(firstComIndex, nextItem), config(config)
 {
 	port = PortPins[portNumber];
 	switch (config->BaseConfig.Type)
@@ -91,7 +91,7 @@ int ARMPinItem::ComObjCount()
 	return 4;
 }
 
-/*void ARMPinItem::Irq(void* item, byte value)
+/*void ARMPinItem::Irq(void* item, uint8_t value)
 {
 	digitalWrite(port, value ^ config->PWM.Invert);
 }*/

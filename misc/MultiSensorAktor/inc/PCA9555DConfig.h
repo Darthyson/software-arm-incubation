@@ -14,7 +14,7 @@
 #include <CounterPinConfig.h>
 #include <PWMPinConfig.h>
 
-enum PCA9555DPinType : byte
+enum PCA9555DPinType : uint8_t
 {
 	PCA9555DPinTypeInput,
 	PCA9555DPinTypeOutput,
@@ -35,8 +35,8 @@ struct PCA9555DPinConfig
 
 struct PCA9555DConfig
 {
-	byte Address;
-	byte IntPin;
+    uint8_t Address;
+    uint8_t IntPin;
 	uint16_t PinEnabled;
 };
 #pragma pack()

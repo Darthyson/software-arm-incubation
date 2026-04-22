@@ -13,7 +13,7 @@
 
 extern int portPins[32];
 
-SHT2xItem::SHT2xItem(byte firstComIndex, TempHumSensorConfig *config, GenericItem* nextItem, uint16_t& objRamPointer) : GenericItem(firstComIndex, nextItem), config(config), sht2x(SHT2xClass()), nextAction(0)
+SHT2xItem::SHT2xItem(uint8_t firstComIndex, TempHumSensorConfig *config, GenericItem* nextItem, uint16_t& objRamPointer) : GenericItem(firstComIndex, nextItem), config(config), sht2x(SHT2xClass()), nextAction(0)
 {
 	sht2x.Init();
 	offset = dpt9ToFloat(config->Offset) * 0.01f;
@@ -59,7 +59,7 @@ void SHT2xItem::Loop(uint32_t now, int updatedObjectNo)
 			float ftemp = temp * 0.01f + offset;
 			uint16_t hum = (uint16_t)(sht2x.GetHumidity());
 			comObjects->objectWriteFloat(firstComIndex + 1, temp);
-			comObjects->objectWrite(firstComIndex + 2, (byte*)&ftemp);
+			comObjects->objectWrite(firstComIndex + 2, (uint8_t*)&ftemp);
 			comObjects->objectWriteFloat(firstComIndex + 3, hum);
 			nextAction = now + (config->Delay * 1000);
 			state = 0;

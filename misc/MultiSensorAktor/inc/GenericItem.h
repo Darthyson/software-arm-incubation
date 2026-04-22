@@ -12,7 +12,7 @@
 class GenericItem
 {
 public:
-	GenericItem(byte firstComIndex, GenericItem* nextItem) : nextItem(nextItem), firstComIndex(firstComIndex) {}
+	GenericItem(uint8_t firstComIndex, GenericItem* nextItem) : nextItem(nextItem), firstComIndex(firstComIndex) {}
 
 	virtual void Loop(uint32_t now, int updatedObjNo) = 0;
 	GenericItem* GetNextItem() { return nextItem; };
@@ -23,7 +23,7 @@ public:
 	static ComObjects* comObjects;
 protected:
 	GenericItem* nextItem;
-	byte firstComIndex;
+	uint8_t firstComIndex;
 };
 
 #endif /* GENERICITEM_H_ */

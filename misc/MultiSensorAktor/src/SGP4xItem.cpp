@@ -13,7 +13,7 @@
 
 extern int portPins[32];
 
-SGP4xItem::SGP4xItem(byte firstComIndex, TempHumSensorConfig *config, GenericItem* nextItem, uint16_t& objRamPointer) : GenericItem(firstComIndex, nextItem), config(config), /*sgp4x(SGP4xClass()),*/ nextAction(0)
+SGP4xItem::SGP4xItem(uint8_t firstComIndex, TempHumSensorConfig *config, GenericItem* nextItem, uint16_t& objRamPointer) : GenericItem(firstComIndex, nextItem), config(config), /*sgp4x(SGP4xClass()),*/ nextAction(0)
 {
     ///\todo implement sgp4x functionality
 //    sgp4x.init(GasIndexAlgorithm_DEFAULT_SAMPLING_INTERVAL * 1000);

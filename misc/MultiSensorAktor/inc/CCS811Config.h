@@ -13,8 +13,8 @@ struct CCS811Config
 	uint16_t PreFan;
 	uint16_t PreMeasure;
 	uint16_t Delay;
-	byte addr;
-	byte wakePin;
+	uint8_t addr;
+	uint8_t wakePin;
 };
 #pragma pack()
 

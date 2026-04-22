@@ -13,9 +13,9 @@
 
 struct CounterPinConfig
 {
-	byte Decimals;
-	byte DecimalsFreq;
-	byte Increment;
+    uint8_t Decimals;
+    uint8_t DecimalsFreq;
+    uint8_t Increment;
 };
 #pragma pack()
 

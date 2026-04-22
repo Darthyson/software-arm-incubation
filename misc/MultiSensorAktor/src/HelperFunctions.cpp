@@ -11,13 +11,13 @@
 
 void HelperFunctions::setComObjPtr(ComObjects* bcu, int objno, ComType type, uint16_t &newAddr)
 {
-	const byte* configTable = bcu->objectConfigTable();
+	const uint8_t* configTable = bcu->objectConfigTable();
 	if (configTable != nullptr)
 	{
 		int size = 1;
 	    if (type > BYTE_1)
 	    {
-	    	const byte objectTypeSizes[10] = { 1, 1, 2, 3, 4, 6, 8, 10, 14, 14 };
+	    	const uint8_t objectTypeSizes[10] = { 1, 1, 2, 3, 4, 6, 8, 10, 14, 14 };
 	    	size = objectTypeSizes[type - BIT_7];
 	    }
 
@@ -30,7 +30,7 @@ void HelperFunctions::setComObjPtr(ComObjects* bcu, int objno, ComType type, uin
 		ComConfigBCU2* cfg = (ComConfigBCU2*) (configTable + offSet);
 		cfg->baseConfig.type = type;
 
-	    byte * addr = (byte *) &cfg->dataPtr;
+		uint8_t * addr = (uint8_t *) &cfg->dataPtr;
 	    if (false)
 	    {
 	    	addr[1] = (newAddr >> 8) & 0xFF;
@@ -48,7 +48,7 @@ void HelperFunctions::setComObjPtr(ComObjects* bcu, int objno, ComType type, uin
 
 void HelperFunctions::setFlagsTablePtr(ComObjects* bcu, uint16_t flagsAddr)
 {
-	byte* configTable = bcu->objectConfigTable();
+    uint8_t* configTable = bcu->objectConfigTable();
 	if (configTable != nullptr)
 	{
 	    if (false)

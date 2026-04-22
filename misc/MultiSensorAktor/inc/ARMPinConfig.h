@@ -13,7 +13,7 @@
 #include <PWMPinConfig.h>
 #include <CounterPinConfig.h>
 
-enum class ARMPinType : byte
+enum class ARMPinType : uint8_t
 {
 	InputFloating,
 	InputPullup,

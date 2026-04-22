@@ -9,7 +9,7 @@
 
 #include <sblib/eib/bcu_base.h>
 
-enum PortFixedPwmValue : byte
+enum PortFixedPwmValue : uint8_t
 {
 	PortFixedPwmValueNever,
 	PortFixedPwmValueOnLock = 128,
@@ -21,8 +21,8 @@ struct PWMPinConfig
 {
 	bool Invert;
 	PortFixedPwmValue FixedValueSwitch;
-	byte FixedValueOnOn;
-	byte FixedValueOnOff;
+	uint8_t FixedValueOnOn;
+	uint8_t FixedValueOnOff;
 };
 #pragma pack()
 

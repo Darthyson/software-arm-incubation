@@ -18,11 +18,11 @@
 class ARMPinItem : public GenericItem
 {
 public:
-	ARMPinItem(byte firstComIndex, byte portNumber, ARMPinConfig* config, GenericItem* nextItem, uint16_t	& objRamPointer);
+	ARMPinItem(uint8_t firstComIndex, uint8_t portNumber, ARMPinConfig* config, GenericItem* nextItem, uint16_t	& objRamPointer);
 	~ARMPinItem() = default;
 
 	void Loop(uint32_t now, int updatedObjectNo);
-//	void Irq(void* item, byte value);
+//	void Irq(void* item, uint8_t value);
 	int ConfigLength();
 	int ComObjCount();
 

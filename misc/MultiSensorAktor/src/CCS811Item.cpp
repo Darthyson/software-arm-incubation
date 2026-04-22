@@ -12,7 +12,7 @@
 #include <HelperFunctions.h>
 #include <ARMPinItem.h>
 
-CCS811Item::CCS811Item(byte firstComIndex, CCS811Config *config, GenericItem* nextItem, uint16_t& objRamPointer) : GenericItem(firstComIndex, nextItem), config(config), ccs811(CCS811Class()), nextAction(0)
+CCS811Item::CCS811Item(uint8_t firstComIndex, CCS811Config *config, GenericItem* nextItem, uint16_t& objRamPointer) : GenericItem(firstComIndex, nextItem), config(config), ccs811(CCS811Class()), nextAction(0)
 {
 	for (int i = 0; i < 10 && !configured; i++)
 	{

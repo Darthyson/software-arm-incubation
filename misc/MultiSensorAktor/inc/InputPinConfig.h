@@ -9,7 +9,7 @@
 
 #include <sblib/eib/bcu_base.h>
 
-enum PortInAction : byte
+enum PortInAction : uint8_t
 {
 	PortInNothing,
 	PortInOff,
@@ -20,14 +20,14 @@ enum PortInAction : byte
 #pragma pack(1)
 struct InputPinConfig
 {
-	byte DebounceTime;
+    uint8_t DebounceTime;
 	PortInAction Hi;
 	PortInAction Lo;
 	PortInAction HiLong;
 	PortInAction LoLong;
 	bool ShortOnLong;
 	uint16_t LongTime;
-	byte LockFlags;
+	uint8_t LockFlags;
 };
 #pragma pack()
 

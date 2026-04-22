@@ -16,7 +16,7 @@
 class SHT4xItem : public GenericItem
 {
 public:
-	SHT4xItem(byte firstComIndex, TempHumSensorConfig* config, GenericItem* nextItem, uint16_t& objRamPtr);
+	SHT4xItem(uint8_t firstComIndex, TempHumSensorConfig* config, GenericItem* nextItem, uint16_t& objRamPtr);
 	~SHT4xItem() = default;
 
 	void Loop(uint32_t now, int updatedObjectNo);
@@ -27,7 +27,7 @@ protected:
 	TempHumSensorConfig *config;
     SHT4xClass sht4x;
 	uint32_t nextAction = 0;
-	byte state = 0;
+	uint8_t state = 0;
 	float offset;
 };
 

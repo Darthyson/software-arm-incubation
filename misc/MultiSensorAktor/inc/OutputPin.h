@@ -16,10 +16,10 @@
 class OutputPin : public GenericPin
 {
 public:
-	OutputPin(byte firstComObj, OutputPinConfig *config, uint16_t& objRamPointer);
+	OutputPin(uint8_t firstComObj, OutputPinConfig *config, uint16_t& objRamPointer);
 	~OutputPin() = default;
 
-	byte GetState(uint32_t now, byte updatedObjectNo);
+	uint8_t GetState(uint32_t now, uint8_t updatedObjectNo);
 
 	int ConfigLength() { return sizeof(OutputPinConfig); }
 	int ComObjCount() { return 4; }

@@ -57,8 +57,8 @@ BcuBase* setup()
     uint16_t objRamPointer = 0x5FC;
 
     DeviceConfig* deviceConfig = (DeviceConfig*)&(*bcu.userEeprom)[CONFIG_ADDRESS];
-    byte nextComObj = 1;
-    byte* configPos = memMapper.memoryPtr(0x6000, false);
+    uint8_t nextComObj = 1;
+    uint8_t* configPos = memMapper.memoryPtr(0x6000, false);
 
   /*  if (deviceConfig->BusSwitches & BusSwitch::SPI0)
     {

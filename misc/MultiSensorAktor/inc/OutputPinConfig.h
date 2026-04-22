@@ -9,7 +9,7 @@
 
 #include <sblib/eib/bcu_base.h>
 
-enum class PortOutLockAction : byte
+enum class PortOutLockAction : uint8_t
 {
 	Nothing = 0,
 	Off = 1,
@@ -17,7 +17,7 @@ enum class PortOutLockAction : byte
 	Toggle = 3,
 };
 
-enum PortOutBlink : byte
+enum PortOutBlink : uint8_t
 {
 	PortOutBlinkNever,
 	PortOutBlinkIfOff,

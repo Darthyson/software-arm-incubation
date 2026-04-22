@@ -15,10 +15,10 @@
 #include <OutputPin.h>
 #include <PWMPin.h>
 
-PCA9555DItem::PCA9555DItem(byte firstComIndex, PCA9555DConfig *config, GenericItem* nextItem, uint16_t& objRamPointer) : GenericItem(firstComIndex, nextItem), config(config)
+PCA9555DItem::PCA9555DItem(uint8_t firstComIndex, PCA9555DConfig *config, GenericItem* nextItem, uint16_t& objRamPointer) : GenericItem(firstComIndex, nextItem), config(config)
 {
-	byte* currentConfig = (byte*)config + sizeof(PCA9555DConfig);
-	byte nextComObj = firstComIndex;
+    uint8_t* currentConfig = (uint8_t*)config + sizeof(PCA9555DConfig);
+    uint8_t nextComObj = firstComIndex;
 
 	outFlag = 0;
 	//lockFlag = 0;
@@ -26,7 +26,7 @@ PCA9555DItem::PCA9555DItem(byte firstComIndex, PCA9555DConfig *config, GenericIt
 	checkTime = 0;
 	forceCheckTill = 0;
 
-	for (byte i = 0; i < 16; i++)
+	for (uint8_t i = 0; i < 16; i++)
 	{
 		if (config->PinEnabled & (1 << i))
 		{
@@ -80,18 +80,18 @@ PCA9555DItem::PCA9555DItem(byte firstComIndex, PCA9555DConfig *config, GenericIt
 		forceCheckTill = millis() + checkTime;
 	}
 
-	configLength = currentConfig - (byte*)config;
+	configLength = currentConfig - (uint8_t*)config;
 	comObjCount = nextComObj - firstComIndex;
 };
 
 void PCA9555DItem::initPCA()
 {
 	uint8_t bytesTransferred = 0;
- 	unsigned char tempBytes1[] = { 0x02, (byte)(outFlag), (byte)(outFlag >> 8) };
+ 	unsigned char tempBytes1[] = { 0x02, (uint8_t)(outFlag), (uint8_t)(outFlag >> 8) };
 	bytesTransferred += Chip_I2C_MasterSend(I2C0, 0x20 | config->Address, tempBytes1 , 3);
 	unsigned char tempBytes2[] = { 0x04, 0X00, 0x00 };
 	bytesTransferred += Chip_I2C_MasterSend(I2C0, 0x20 | config->Address, tempBytes2 , 3);
-	unsigned char tempBytes3[] = { 0x06, (byte)inOutConfig, (byte)(inOutConfig >> 8) };
+	unsigned char tempBytes3[] = { 0x06, (uint8_t)inOutConfig, (uint8_t)(inOutConfig >> 8) };
 	bytesTransferred += Chip_I2C_MasterSend(I2C0, 0x20 | config->Address, tempBytes3, 3);
 
 	if (bytesTransferred != 9)
@@ -120,7 +120,7 @@ void PCA9555DItem::Loop(uint32_t now, int updatedObjectNo)
 	{
 		outFlag = newState;
 		uint16_t output = outFlag;
-		unsigned char tempBytes1[] = { 0x02, (byte)(output), (byte)(output >> 8) };
+		unsigned char tempBytes1[] = { 0x02, (uint8_t)(output), (uint8_t)(output >> 8) };
 		Chip_I2C_MasterSend(I2C0, 0x20 + config->Address, tempBytes1 , 3);
 	}
 
@@ -132,7 +132,7 @@ void PCA9555DItem::Loop(uint32_t now, int updatedObjectNo)
 	if (forceCheckTill > now)
 	{
 		uint16_t inputStatus = 0;
-		if (Chip_I2C_MasterCmdRead(I2C0, 0x20 | config->Address, 0, (byte*)&inputStatus, 2) != 2)
+		if (Chip_I2C_MasterCmdRead(I2C0, 0x20 | config->Address, 0, (uint8_t*)&inputStatus, 2) != 2)
 		{
 			return;
 		}

@@ -12,10 +12,10 @@
 class GenericPin
 {
 public:
-	GenericPin(byte firstComIndex) : firstComIndex(firstComIndex) {};
+	GenericPin(uint8_t firstComIndex) : firstComIndex(firstComIndex) {};
 	~GenericPin() = default;
 
-	virtual byte GetState(uint32_t now, byte updatedObjectNo) { return 0; };
+	virtual uint8_t GetState(uint32_t now, uint8_t updatedObjectNo) { return 0; };
 	virtual void PutValue(uint32_t now, int val) {};
 
 	virtual int ConfigLength() = 0;
@@ -24,7 +24,7 @@ public:
 	static ComObjects* comObjects;
 
 protected:
-	byte firstComIndex;
+	uint8_t firstComIndex;
 };
 
 #endif /* GENERICPIN_H_ */

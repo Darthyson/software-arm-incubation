@@ -9,7 +9,7 @@
 #include <OutputPin.h>
 #include <HelperFunctions.h>
 
-OutputPin::OutputPin(byte firstComIndex, OutputPinConfig* config, uint16_t& objRamPointer) : GenericPin(firstComIndex), config(config), sw(false), blinkObjState(false), blinkState(false), blink(false), lastState(false), blinkActionTime(0)
+OutputPin::OutputPin(uint8_t firstComIndex, OutputPinConfig* config, uint16_t& objRamPointer) : GenericPin(firstComIndex), config(config), sw(false), blinkObjState(false), blinkState(false), blink(false), lastState(false), blinkActionTime(0)
 {
 	comObjects->requestObjectRead(firstComIndex);
 	comObjects->requestObjectRead(firstComIndex + 2);
@@ -30,7 +30,7 @@ OutputPin::OutputPin(byte firstComIndex, OutputPinConfig* config, uint16_t& objR
 	lockAction = (PortOutLockAction)(config->lockFlags & 0x03);
 }
 
-byte OutputPin::GetState(uint32_t now, byte updatedObjectNo)
+uint8_t OutputPin::GetState(uint32_t now, uint8_t updatedObjectNo)
 {
 	if (updatedObjectNo == firstComIndex)
 	{

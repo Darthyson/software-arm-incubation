@@ -17,20 +17,20 @@
 class DHTPin : public GenericPin
 {
 public:
-	DHTPin(int port, byte firstComIndex, DHTConfig* config, bool dht11, uint16_t& objRamPointer);
+	DHTPin(int port, uint8_t firstComIndex, DHTConfig* config, bool dht11, uint16_t& objRamPointer);
 	~DHTPin() = default;
 
-	byte GetState(uint32_t now, byte updatedObjectNo);
+	uint8_t GetState(uint32_t now, uint8_t updatedObjectNo);
 
 	int ConfigLength() { return sizeof(DHTConfig); }
 	int ComObjCount() { return 4; }
 
 protected:
 	uint32_t nextAction = 0;
-	byte state = 0;
+	uint8_t state = 0;
 	DHT dht;
 	DHTConfig* config;
-	byte retries;
+	uint8_t retries;
 };
 
 

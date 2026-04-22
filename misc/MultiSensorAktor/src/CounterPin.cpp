@@ -9,7 +9,7 @@
 #include <CounterPin.h>
 #include <math.h>
 
-CounterPin::CounterPin(byte firstComIndex, CounterPinConfig *config) : GenericPin(firstComIndex), config(config)
+CounterPin::CounterPin(uint8_t firstComIndex, CounterPinConfig *config) : GenericPin(firstComIndex), config(config)
 {
    	comObjects->requestObjectRead(firstComIndex);
 }
@@ -22,14 +22,14 @@ void CounterPin::PutValue(uint32_t now, int val)
 		float val = comObjects->objectRead(firstComIndex);
 		val += config->Increment;
 		val = roundFloat(val, config->Decimals);
-		comObjects->objectWrite(firstComIndex, (byte*)&val);
+		comObjects->objectWrite(firstComIndex, (uint8_t*)&val);
 
 		if (lastTime < now)
 		{
 			comObjects->objectWrite(firstComIndex + 1, now - lastTime);
 			float freq = 3600000.0f / (now - lastTime);
 			freq = roundFloat(freq, config->DecimalsFreq);
-			comObjects->objectWrite(firstComIndex + 2, (byte*)&freq);
+			comObjects->objectWrite(firstComIndex + 2, (uint8_t*)&freq);
 		}
 	}
 }
