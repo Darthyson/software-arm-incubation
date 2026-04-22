@@ -102,7 +102,7 @@ enum eDisplayUnit {invalid, cm, percent, m3};
 enum class Type {tRCMessage, tRCParameterMessage, tRCDisplayMessage, tRCSwitchDisplayMessage, tRCSwitchToTapWaterRefillMessage, tRCSwitchToReservoirMessage};
 
 static const char RC_INVALID_COMMAND = (char)0;
-static const byte RC_LEVEL_CALIBRATION_FACTOR = 50;
+static const uint8_t RC_LEVEL_CALIBRATION_FACTOR = 50;
 static const int RC_INVALID_MESSAGE_LENGTH = 30;
 
 class RCMessage
@@ -112,15 +112,15 @@ public:
     virtual ~RCMessage();
     virtual const Type type() { return Type::tRCMessage;}
 
-    static RCMessage* GetRCMessageFromTelegram(byte * msg, int msg_len);
+    static RCMessage* GetRCMessageFromTelegram(uint8_t * msg, int msg_len);
     bool IsValid() const {return _IsValid;}
 protected:
     static const char msgIdentifier = RC_INVALID_COMMAND;
-    static const byte msgLength = 0;
-    static constexpr byte msgExample[msgLength] = {};
+    static const uint8_t msgLength = 0;
+    static constexpr uint8_t msgExample[msgLength] = {};
     bool _IsValid;
 
-    virtual bool Decode(byte * msg, int msg_len) = 0;
+    virtual bool Decode(uint8_t * msg, int msg_len) = 0;
 };
 
 class RCParameterMessage : public RCMessage
@@ -130,8 +130,8 @@ class RCParameterMessage : public RCMessage
 // #Data :     70 30 07 01 03 01 42 00 31 01 30 06 51 51 97 00 00
 public:
     static const char msgIdentifier = 'p'; // 0 byte
-    static const byte msgLength = 17;
-    static constexpr byte msgExample[msgLength] = {0x70, 0x30, 0x07, 0x01, 0x03, 0x01, 0x42, 0x00, 0x31, 0x01, 0x30, 0x06, 0x51, 0x51, 0x97, 0x00, 0x00};
+    static const uint8_t msgLength = 17;
+    static constexpr uint8_t msgExample[msgLength] = {0x70, 0x30, 0x07, 0x01, 0x03, 0x01, 0x42, 0x00, 0x31, 0x01, 0x30, 0x06, 0x51, 0x51, 0x97, 0x00, 0x00};
 
     RCParameterMessage();
     Type const type() override {return Type::tRCParameterMessage;}
@@ -174,7 +174,7 @@ protected:
     int _LevelCalibrated_cm;
     float _Level_m3_Calibrated;
 
-    bool Decode(byte * msg, int msg_len) override;
+    bool Decode(uint8_t * msg, int msg_len) override;
 };
 
 class RCDisplayMessage : public RCMessage
@@ -184,8 +184,8 @@ class RCDisplayMessage : public RCMessage
 // #Data:    77 95 00 08 02
 public:
     static const char msgIdentifier = 'w'; // 01. byte
-    static const byte msgLength = 5;
-    static constexpr byte msgExample[msgLength] = {0x77, 0x95, 0x00, 0x08, 0x02};
+    static const uint8_t msgLength = 5;
+    static constexpr uint8_t msgExample[msgLength] = {0x77, 0x95, 0x00, 0x08, 0x02};
 
     RCDisplayMessage();
     Type const type() override {return Type::tRCDisplayMessage;}
@@ -237,43 +237,43 @@ protected:
     bool _PumpActive;
     bool _TapWaterRefillInputActive;
     bool _OptionalInputActive;
-    bool Decode(byte * msg, int msg_len) override;
+    bool Decode(uint8_t * msg, int msg_len) override;
 };
 
 class RCSwitchDisplayMessage : public RCMessage
 {
 public:
     static const char msgIdentifier = 'c';
-    static const byte msgLength = 1;
-    static constexpr byte msgExample[msgLength] = {msgIdentifier};
+    static const uint8_t msgLength = 1;
+    static constexpr uint8_t msgExample[msgLength] = {msgIdentifier};
     RCSwitchDisplayMessage();
     Type const type() override {return Type::tRCSwitchDisplayMessage;}
 protected:
-    bool Decode(byte * msg, int msg_len) override;
+    bool Decode(uint8_t * msg, int msg_len) override;
 };
 
 class RCSwitchToTapWaterRefillMessage : public RCMessage
 {
 public:
     static const char msgIdentifier = 'a';
-    static const byte msgLength = 1;
-    static constexpr byte msgExample[msgLength] = {msgIdentifier};
+    static const uint8_t msgLength = 1;
+    static constexpr uint8_t msgExample[msgLength] = {msgIdentifier};
     RCSwitchToTapWaterRefillMessage();
     Type const type() override {return Type::tRCSwitchToTapWaterRefillMessage;}
 protected:
-    bool Decode(byte * msg, int msg_len) override;
+    bool Decode(uint8_t * msg, int msg_len) override;
 };
 
 class RCSwitchToReservoirMessage : public RCMessage
 {
 public:
     static const char msgIdentifier = 'b';
-    static const byte msgLength = 1;
-    static constexpr byte msgExample[msgLength] = {msgIdentifier};
+    static const uint8_t msgLength = 1;
+    static constexpr uint8_t msgExample[msgLength] = {msgIdentifier};
     RCSwitchToReservoirMessage();
     Type const type() override {return Type::tRCSwitchToReservoirMessage;}
 protected:
-    bool Decode(byte * msg, int msg_len) override;
+    bool Decode(uint8_t * msg, int msg_len) override;
 };
 
 #endif /* RC_PROTOCOL_H_ */

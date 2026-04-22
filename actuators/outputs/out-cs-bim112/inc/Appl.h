@@ -46,7 +46,7 @@ typedef struct
  bool OnOff;     // Wird kurzzeitig im Rahmen der Dauer-Ein Funktion zur Darstellung des abgespeicherten Zustands genutzt.
 } TStateAndTrigger;
 
-enum class TimeFctStates : byte {Idle, StairOn, StairWarn1, StairWarn2, StairBack2On, DelayOn, DelayOff, BlinkOn, BlinkOff};
+enum class TimeFctStates : uint8_t {Idle, StairOn, StairWarn1, StairWarn2, StairBack2On, DelayOn, DelayOff, BlinkOn, BlinkOff};
 
 #define STPREPRESET2_M  0x03 // 2 bit: 0: ausgeschaltet, 1: eingeschaltet, 3: kein gültiger Zustand gespeichert
 #define STPREPRESET2_ON    1
@@ -62,38 +62,38 @@ enum class TimeFctStates : byte {Idle, StairOn, StairWarn1, StairWarn2, StairBac
 #define STDISTIMEFCT_O     6
 typedef struct
 {
- byte IntSwitchStates; // 7bit, gespeicherte Schaltzustände verschiedener Funktionsblöcke. Enhalten sind:
+ uint8_t IntSwitchStates; // 7bit, gespeicherte Schaltzustände verschiedener Funktionsblöcke. Enhalten sind:
  // PrePreset2State, 2bit
  // SwitchObject, 1bit
  // PreBlinkState, 1bit
  // ChannelStateAfterTimeFunction, 1bit
  // DisableTimeFunction, 1bit
  // PermanentOn, 1bit
- byte Preset; // unteres Nibble: Preset1, oberes Nibble: Preset2
+ uint8_t Preset; // unteres Nibble: Preset1, oberes Nibble: Preset2
  // 0: aus, 1: ein, 4: Zustand vor Preset2 wiederherstellen, 6: Konf wiederherstellen - Preset2 kennt nur 0 & 1
- byte BlinkDnCnt; // 1 Byte
- byte ScenesVal; // Werte für die 5 möglichen Szenen, d.h. 5 bit belegt
+ uint8_t BlinkDnCnt; // 1 Byte
+ uint8_t ScenesVal; // Werte für die 5 möglichen Szenen, d.h. 5 bit belegt
  //==> unsigned short Threshold1; // Da dieser Wert über den Bus geändert werden kann, wird er im Objekt selbst gespeichert
  //==> unsigned short OldTreshVal; // Der Objektwert Threshold wird direkt aus diesem gelesen, eine Ablage hier ist unnötig
- byte OldThreshState; // 2 bit belegt: 0: noch keine Thresholdüberschreitung festgestellt, 1: oberer Threshold, 2: unterer Threshold
- byte LogicObjVals; // 4 bit belegt
+ uint8_t OldThreshState; // 2 bit belegt: 0: noch keine Thresholdüberschreitung festgestellt, 1: oberer Threshold, 2: unterer Threshold
+ uint8_t LogicObjVals; // 4 bit belegt
  // Bit 0 steht für den Objektwert Logik 1, Bit 1 für eine aktuelle Änderung Logik 1,
  // Bit 2 für den Objektwert Logik 2, Bit 3 für eine Änderung Logik 2
- byte Safety; // 8 bit belegt
+ uint8_t Safety; // 8 bit belegt
  // Bit 7..4: Maske der freigeschalteten Sicherheitsoptionen für diesen Kanal
  // Bit 3..0: Aktueller Aktivierungsstand der Sicherheitsoptionen, soweit für diesen Kanal freigeschaltet
- byte ForcedPos; // 2 bit belegt
+ uint8_t ForcedPos; // 2 bit belegt
  // Bit 1: Bei 1 Schalthandlungen blockieren, ansonsten: Bit 0: Zielschaltzustand
  // Wenn Zielzustand variabel, wird dieses Bit auch zwischendurch aktualisiert
  unsigned int TFTargetTime; // Zielzeit der nächsten Aktion bei einer Zeitfunktion
  TimeFctStates TFState; // 1 Byte
  //==> unsigned short DurationStaircase; // Die Zeitdauer der Treppenlichtfunktion in Sekunden (wird im Kommunikationsobjekt selbst gespeichert)
 
- byte CurrFctStates; // 6 bit belegt, zusammengefasst mehrere gespeicherte Zustände für die Strommessfunktion
+ uint8_t CurrFctStates; // 6 bit belegt, zusammengefasst mehrere gespeicherte Zustände für die Strommessfunktion
  // OldContactState, 1bit, gespeicherter Kontaktzustand, um Änderungen zu verfolgen
  // ThresholdStates 1/2, 2*2 Bit für die Zustände der Stromschwellwerte
  // OldContactFailState, 1bit, Zustand der Kontaktfehlerüberwachung
- byte CFContFailBlanking; // 2 Zähler für die Kontaktfehlerüberwachung:
+ uint8_t CFContFailBlanking; // 2 Zähler für die Kontaktfehlerüberwachung:
  // oberes Nibble: Filter, unteres Nibble: Blanking-Zeit
  unsigned int CFStatusTime; // Zähler für die gewählte Frequenz "Stromwert senden"
  unsigned short CFContCloseBlanking; // Wartezeit nach Kontakt schließen bis zur Grenzwertüberwachung
@@ -163,9 +163,9 @@ public:
   */
  void SetIniChannelState(int chno);
 
- void StoreChannelState(int chno, byte* ptr, unsigned referenceTime);
+ void StoreChannelState(int chno, uint8_t* ptr, unsigned referenceTime);
 
- void RecallChannelState(int chno, byte* ptr, unsigned referenceTime);
+ void RecallChannelState(int chno, uint8_t* ptr, unsigned referenceTime);
 
  void StoreApplData(UsrCallbackType callbackType);
 
@@ -300,7 +300,7 @@ protected:
   * Zusätzlich bearbeitet diese Routine die empfangenen Logikobjekte, obwohl diese
   * direkt keine Schaltaufträge generieren können.
   */
- void OneLogicFunction(byte LogicNo, TStateAndTrigger &trigger, int chno);
+ void OneLogicFunction(uint8_t LogicNo, TStateAndTrigger &trigger, int chno);
 
  /*
   * Bearbeitet die beiden Logikfunktionen für einen Kanal.
@@ -334,7 +334,7 @@ protected:
   */
  void ProcAliveObject(unsigned referenceTime);
 
- byte IniValueThresholdState(int chno);
+ uint8_t IniValueThresholdState(int chno);
  void ProcessThresholds(int chno, TStateAndTrigger &Trigger);
 
  /*
@@ -396,20 +396,20 @@ protected:
 // Besonderheit: Die Adresse darf beliebig sein, daher auch ungerade
 inline unsigned short PtrRdUint16(void *ptr)
 {
- return *(byte*)ptr | *((byte*)ptr+1) << 8;
+ return *(uint8_t*)ptr | *((uint8_t*)ptr+1) << 8;
 }
 
 // Besonderheit: Die Adresse darf beliebig sein, daher auch ungerade
 inline unsigned short PtrRdUint32(void *ptr)
 {
- return *(byte*)ptr | *((byte*)ptr+1) << 8 | *((byte*)ptr+2) << 16 | *((byte*)ptr+3) << 24;
+ return *(uint8_t*)ptr | *((uint8_t*)ptr+1) << 8 | *((uint8_t*)ptr+2) << 16 | *((uint8_t*)ptr+3) << 24;
 }
 
 // Besonderheit: Die Adresse darf beliebig sein, daher auch ungerade
 inline void PtrWrUint16(void *ptr, unsigned short val)
 {
- byte *bptr;
- bptr = (byte*)ptr;
+ uint8_t *bptr;
+ bptr = (uint8_t*)ptr;
  *bptr++ = val & 0xff;
  val >>= 8;
  *bptr++ = val & 0xff;
@@ -418,8 +418,8 @@ inline void PtrWrUint16(void *ptr, unsigned short val)
 // Besonderheit: Die Adresse darf beliebig sein, daher auch ungerade
 inline void PtrWrUint32(void *ptr, unsigned val)
 {
- byte *bptr;
- bptr = (byte*)ptr;
+ uint8_t *bptr;
+ bptr = (uint8_t*)ptr;
  *bptr++ = val & 0xff;
  val >>= 8;
  *bptr++ = val & 0xff;

@@ -15,7 +15,7 @@
 
 extern MemMapperMod memMapper;
 
-enum class AppOperatingStates : byte
+enum class AppOperatingStates : uint8_t
 {
  Startup,
  Stabilize,        // Es wird gewartet, dass die Versorgungsspannung eine bestimmte Zeit stabil anliegt

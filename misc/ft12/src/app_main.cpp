@@ -30,10 +30,10 @@ constexpr uint32_t ft12ExchangeTimeoutMs = 2 * ((FT12_EXCHANGE_TIMEOUT_BITS * 10
 /** ft12 line idle timeout converted in milliseconds */
 constexpr uint32_t ft12LineIdleTimeoutMs = 2 * ((FT12_LINE_IDLE_TIMEOUT_BITS * 1000/FT_BAUDRATE) + 1);
 
-byte ftFrameIn[FT_FRAME_SIZE] = {0};        //!< Buffer for incoming FT1.2 frames
+uint8_t ftFrameIn[FT_FRAME_SIZE] = {0};        //!< Buffer for incoming FT1.2 frames
 uint8_t ftFrameInLen = 0;                   //!< Length of the data in ftFrameIn
-byte ftFrameOut[FT_FRAME_SIZE] = {0};       //!< Buffer for preparing FT1.2 frames to send to serial port
-byte ftFrameOutBuffer[FT_FRAME_SIZE] = {0}; //!< Buffer for outgoing FT1.2 frames which are waiting an ACK
+uint8_t ftFrameOut[FT_FRAME_SIZE] = {0};       //!< Buffer for preparing FT1.2 frames to send to serial port
+uint8_t ftFrameOutBuffer[FT_FRAME_SIZE] = {0}; //!< Buffer for outgoing FT1.2 frames which are waiting an ACK
 uint8_t ftFrameOutBufferLength = 0;         //!< Length of the data in ftFrameOutBuffer
 
 int16_t repeatCounter = 0;                  //! Decrement on every repeat until its zero, initialized with @ref FT12_REPEAT_LIMIT
@@ -107,7 +107,7 @@ void sendft12Ack()
  * @param frame     ft12 frame to send
  * @param frameSize size of the frame
  */
-void sendft12withAckWaiting(byte* frame, const int32_t frameSize)
+void sendft12withAckWaiting(uint8_t* frame, const int32_t frameSize)
 {
     FtControlField cf  = controlFieldFromByte(frame[4]);
     if (cf.frameCountBitValid && ackPending())
@@ -166,7 +166,7 @@ void sendft12RepeatedFrame()
  * @param frame          The buffer that contains the frame
  * @param funcCode       The function code, e.g. FC_RESET
  */
-void sendFixedFrame(byte* frame, const FtFunctionCode& funcCode)
+void sendFixedFrame(uint8_t* frame, const FtFunctionCode& funcCode)
 {
     if (funcCode == FC_SEND_UDAT)
     {
@@ -228,7 +228,7 @@ BcuBase* setup()
  *
  * @return true if sender address was replaced with 15.15.255, otherwise false
  */
-bool dirtyCheckAndReplaceInvalidDefaultSenderAddress(byte* frame, const FtFunctionCode& funcCode, const EmiCode& emi, const uint8_t& userDataLength)
+bool dirtyCheckAndReplaceInvalidDefaultSenderAddress(uint8_t* frame, const FtFunctionCode& funcCode, const EmiCode& emi, const uint8_t& userDataLength)
 {
     // invalid frame example:
     // # 0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15
@@ -274,7 +274,7 @@ bool dirtyCheckAndReplaceInvalidDefaultSenderAddress(byte* frame, const FtFuncti
  * @param emi            The @ref EmiCode to send
  * @param userDataLength The length of the frame's payload
  */
-void sendVariableFrame(byte* frame, const FtFunctionCode& funcCode, const EmiCode& emi, const uint8_t& userDataLength)
+void sendVariableFrame(uint8_t* frame, const FtFunctionCode& funcCode, const EmiCode& emi, const uint8_t& userDataLength)
 {
     if (funcCode != FC_SEND_UDAT)
     {

@@ -13,7 +13,7 @@
 
 BCU2 bcu = BCU2();
 
-const byte* params; //!< The parameters of the current channel (4 bytes)
+const uint8_t* params; //!< The parameters of the current channel (4 bytes)
 int lastLock[NUM_CHANNELS];
 
 /**

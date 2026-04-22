@@ -9,7 +9,7 @@
 #define TIMEFUNCTIONS_H_
 
 
-//enum TimeFctStates : byte {Idle, StairOn, StairWarn, DelayOn, DelayOff};
+//enum TimeFctStates : uint8_t {Idle, StairOn, StairWarn, DelayOn, DelayOff};
 
 class Timefunctions {
 public:

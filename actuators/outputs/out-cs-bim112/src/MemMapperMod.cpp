@@ -12,7 +12,7 @@
 
 #include <MemMapperMod.h>
 
-int MemMapperMod::writeMemPtr(int virtAddress, byte *data, int length)
+int MemMapperMod::writeMemPtr(int virtAddress, uint8_t *data, int length)
 {
  if ((virtAddress >= 0x4B20) && (virtAddress < 0x8000))
  { // Hier wird ein größerer Speicherbereich ab 0x4B20 emuliert.
@@ -31,7 +31,7 @@ int MemMapperMod::writeMemPtr(int virtAddress, byte *data, int length)
   return MEM_MAPPER_INVALID_ADDRESS;
 }
 
-int MemMapperMod::readMemPtr(int virtAddress, byte *data, int length, bool forceFlash)
+int MemMapperMod::readMemPtr(int virtAddress, uint8_t *data, int length, bool forceFlash)
 {
  if ((virtAddress >= 0x4B20) && (virtAddress < 0x8000))
  { // Hier wird ein größerer Speicherbereich ab 0x4B20 emuliert.

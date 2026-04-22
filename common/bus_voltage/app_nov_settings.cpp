@@ -33,7 +33,7 @@ bool NonVolatileSetting::RecallAppData(unsigned char *appdata, unsigned int size
      * Die größte Sequenznummer ist dann die gültige Konfiguration.
      */
 
-    byte *StoragePtr;
+    uint8_t *StoragePtr;
     StoragePtr = memMapper_.memoryPtr(0, false);
 
     if (StoragePtr == nullptr)
@@ -54,7 +54,7 @@ bool NonVolatileSetting::RecallAppData(unsigned char *appdata, unsigned int size
 
 bool NonVolatileSetting::StoreApplData(unsigned char *appdata, unsigned int size)
 {
-    byte* StoragePtr;
+    uint8_t* StoragePtr;
     // Kann der Mapper überhaupt die Seite 0 mappen? Checken!
     memMapper_.writeMem(0, 0); // writeMem() aktiviert die passende Speicherseite, entgegen zu memoryPtr()
     StoragePtr = memMapper_.memoryPtr(0, false);

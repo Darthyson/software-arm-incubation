@@ -34,7 +34,7 @@ private:
  int pins_def[BUTTONLEDCNT];
  int led_states;
  unsigned button_states;
- byte button_debounce[BUTTONLEDCNT];
+ uint8_t button_debounce[BUTTONLEDCNT];
 };
 
 #endif /* MANUALCTRL_H_ */

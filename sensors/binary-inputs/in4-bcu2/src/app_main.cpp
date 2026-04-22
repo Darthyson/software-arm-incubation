@@ -26,8 +26,8 @@ static const int inputPins[] = { PIO2_3, PIO2_2, PIO2_1, PIO2_0 };
 // Debouncers for inputs
 Debouncer inputDebouncer[NUM_CHANNELS];
 
-const byte* channelParams;
-const byte* channelTimingParams;
+const uint8_t* channelParams;
+const uint8_t* channelTimingParams;
 
 /**
  * Application setup

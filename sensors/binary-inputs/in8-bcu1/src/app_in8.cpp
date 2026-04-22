@@ -19,7 +19,7 @@
 BCU1 bcu = BCU1();
 
 // The parameters of the current channel (4 bytes)
-const byte* params;
+const uint8_t* params;
 Timeout timeout[NUM_CHANNELS * 2];
 unsigned int delayTime[NUM_CHANNELS * 2];
 int lastLock[NUM_CHANNELS];

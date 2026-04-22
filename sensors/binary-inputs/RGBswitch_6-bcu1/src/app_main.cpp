@@ -23,8 +23,8 @@ APP_VERSION("SBrgb_sw", "1", "12") // Don't forget to also change the build-vari
 // Debouncers for inputs
 Debouncer inputDebouncer[NUM_CHANNELS];
 
-const byte* channelParams;
-const byte* LEDparams;
+const uint8_t* channelParams;
+const uint8_t* LEDparams;
 
 #ifdef DIRECT_IO
 // Input pins

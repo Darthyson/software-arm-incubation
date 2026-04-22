@@ -18,8 +18,8 @@
 
 extern BCU1 bcu;
 
-const byte* functionsParams;
-//const byte* TimingParams;
+const uint8_t* functionsParams;
+//const uint8_t* TimingParams;
 
 bool applicationBoardConnected = true;
 bool use_external_target_temperature;

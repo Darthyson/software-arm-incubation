@@ -29,7 +29,7 @@ private:
     Avg ag;         // average aggregator
     // current factor adjusted lux sample
     BH1750 bh;      // the associated light sensor
-    byte mTime;     // the current measurement time
+    uint8_t mTime;     // the current measurement time
 
     float lux;  // ditto
     float trig;     // at what lux difference to send if not 0

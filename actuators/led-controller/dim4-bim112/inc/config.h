@@ -22,7 +22,7 @@ typedef struct
     unsigned int noOfChannels;  //!> how many channels are supported with this hardware
     unsigned short deviceType;  //!> bcu.begin devicetype
     unsigned short appVersion;  //!> application version
-    byte hardwareVersion[6];    //!> The hardware identification number (see selfbus wiki "Verwendung der sblib")
+    uint8_t hardwareVersion[6];    //!> The hardware identification number (see selfbus wiki "Verwendung der sblib")
     const char *version;
 } HardwareVersion;
 

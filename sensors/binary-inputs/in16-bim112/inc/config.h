@@ -31,7 +31,7 @@ typedef struct
     unsigned short appVersion;  //!> application version
     unsigned short baseAddress; //!> Base address of the config parameters (0x4400 + Offset first param.(debounce-Time))
     unsigned short logicBaseAddress; //!> Base address of the logic parameters
-    byte hardwareVersion[6];    //!> The hardware identification number (see selfbus wiki "Verwendung der sblib")
+    uint8_t hardwareVersion[6];    //!> The hardware identification number (see selfbus wiki "Verwendung der sblib")
     const char *version;
 } HardwareVersion;
 

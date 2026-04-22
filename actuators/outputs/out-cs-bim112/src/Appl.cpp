@@ -29,9 +29,9 @@ Appl appl;
 
 MASK0701 bcu = MASK0701();
 
-inline byte ReadChConfigByte(int chno, int confaddr)
+inline uint8_t ReadChConfigByte(int chno, int confaddr)
 {
- byte retval = bcu.userEeprom->getUInt8(APP_STARTADDR+APP_CHOFFS*chno+confaddr);;
+ uint8_t retval = bcu.userEeprom->getUInt8(APP_STARTADDR+APP_CHOFFS*chno+confaddr);;
  return retval;
 }
 
@@ -47,7 +47,7 @@ inline unsigned short ReadChConfigUInt16(int chno, int confaddr)
  * Memory-Mapper gelöst. Zugriffe, die ins "Jenseits" gehen würden,
  * werden auf memMapper umgeleitet.
 */
-byte ReadConfigByte(uint16_t confaddr)
+uint8_t ReadConfigByte(uint16_t confaddr)
 {
  if (confaddr >= (bcu.userEeprom->endAddr()-APP_STARTADDR))
  {
@@ -59,8 +59,8 @@ byte ReadConfigByte(uint16_t confaddr)
 
 unsigned short ReadConfigUInt16(int confaddr)
 {
- byte retval_low = ReadConfigByte(confaddr);
- byte retval_high = ReadConfigByte(confaddr+1) << 8;
+ uint8_t retval_low = ReadConfigByte(confaddr);
+ uint8_t retval_high = ReadConfigByte(confaddr+1) << 8;
  return (unsigned short)retval_low + (unsigned short)retval_high;
 // if (confaddr >= (bcu.userEeprom->endAddr()-APP_STARTADDR))
 // {
@@ -187,7 +187,7 @@ void Appl::InitialChannelSwitch(unsigned referenceTime)
    {
     // Bei diesem Kanal soll nicht die Neuinitialisierung übersprungen werden.
     // (Wäre der Fall bei Download ohne Änderungen in diesem Kanal)
-    byte Conf = ((ReadChConfigByte(chno, APP_SW_ABVR_O) & APP_SW_ABVR_M ) >> APP_SW_ABVR_B);
+    uint8_t Conf = ((ReadChConfigByte(chno, APP_SW_ABVR_O) & APP_SW_ABVR_M ) >> APP_SW_ABVR_B);
     if (Conf < 2)
     {
      trigger.Sw = true;
@@ -403,26 +403,26 @@ void Appl::SetIniChannelState(int chno)
  }
 }
 /*
-byte IntSwitchStates; // 7bit, gespeicherte Schaltzustände verschiedener Funktionsblöcke. Enhalten sind:
+uint8_t IntSwitchStates; // 7bit, gespeicherte Schaltzustände verschiedener Funktionsblöcke. Enhalten sind:
 // PrePreset2State, 2bit
 // SwitchObject, 1bit
 // PreBlinkState, 1bit
 // ChannelStateAfterTimeFunction, 1bit
 // DisableTimeFunction, 1bit
 // PermanentOn, 1bit
-byte Preset; // unteres Nibble: Preset1, oberes Nibble: Preset2
-byte BlinkDnCnt; // 1 Byte
-byte ScenesVal; // Werte für die 5 möglichen Szenen, d.h. 5 bit belegt
+uint8_t Preset; // unteres Nibble: Preset1, oberes Nibble: Preset2
+uint8_t BlinkDnCnt; // 1 Byte
+uint8_t ScenesVal; // Werte für die 5 möglichen Szenen, d.h. 5 bit belegt
 //==> unsigned short Threshold1; // Da dieser Wert über den Bus geändert werden kann, wird er hier gespeichert
 //==> unsigned short OldTreshVal; // Der Objektwert Threshold wird direkt aus diesem gelesen, eine Ablage hier ist unnötig
-byte OldThreshState; // 3 bit belegt: 0: noch keine Thresholdüberschreitung festgestellt, 1: oberer Threshold, 2: unterer Threshold
-byte LogicObjVals; // 4 bit belegt
+uint8_t OldThreshState; // 3 bit belegt: 0: noch keine Thresholdüberschreitung festgestellt, 1: oberer Threshold, 2: unterer Threshold
+uint8_t LogicObjVals; // 4 bit belegt
 // Bit 0 steht für den Objektwert Logik 1, Bit 1 für eine aktuelle Änderung Logik 1,
 // Bit 2 für den Objektwert Logik 2, Bit 3 für eine Änderung Logik 2
-byte Safety; // 8 bit belegt
+uint8_t Safety; // 8 bit belegt
 // Bit 7..4: Maske der freigeschalteten Sicherheitsoptionen für diesen Kanal
 // Bit 3..0: Aktueller Aktivierungsstand der Sicherheitsoptionen, soweit für diesen Kanal freigeschaltet
-byte ForcedPos; // 2 bit belegt
+uint8_t ForcedPos; // 2 bit belegt
 // Bit 1: Bei 1 Schalthandlungen blockieren, ansonsten: Bit 0: Zielschaltzustand
 // Wenn Zielzustand variabel, wird dieses Bit auch zwischendurch aktualisiert
 TimeFctStates TFState; // 1 Byte
@@ -430,7 +430,7 @@ unsigned int TFTargetTime; // Zielzeit der nächsten Aktion bei einer Zeitfunkti
 //==> unsigned short DurationStaircase; // Die Zeitdauer der Treppenlichtfunktion in Sekunden (wird im Kommunikationsobjekt selbst gespeichert)
 */
 
-void Appl::StoreChannelState(int chno, byte* ptr, unsigned referenceTime)
+void Appl::StoreChannelState(int chno, uint8_t* ptr, unsigned referenceTime)
 {
  *ptr++ = ChannelStates[chno].IntSwitchStates;
  *ptr++ = ChannelStates[chno].Preset;
@@ -445,14 +445,14 @@ void Appl::StoreChannelState(int chno, byte* ptr, unsigned referenceTime)
  //*ptr++ = ChannelStates[chno].LogicObjVals;
  //*ptr++ = ChannelStates[chno].Safety;
  //*ptr++ = ChannelStates[chno].ForcedPos;
- *ptr++ = (byte)ChannelStates[chno].TFState;
+ *ptr++ = (uint8_t)ChannelStates[chno].TFState;
  PtrWrUint32(ptr, ChannelStates[chno].TFTargetTime - referenceTime);
  ptr+=4;
  PtrWrUint16(ptr, ChObjectRead(chno, OBJ_TIMDURATION));
  ptr+=2;
 } // 16 Byte
 
-void Appl::RecallChannelState(int chno, byte* ptr, unsigned referenceTime)
+void Appl::RecallChannelState(int chno, uint8_t* ptr, unsigned referenceTime)
 {
  unsigned data;
  data = *ptr++; // IntSwitchStates
@@ -511,10 +511,10 @@ void Appl::RecallChannelState(int chno, byte* ptr, unsigned referenceTime)
 // Wird nur nach Systemstart aufgerufen, genau genommen ist type=UsrCallbackType::recallAppStartup also immer gegeben.
 void Appl::RecallAppData(UsrCallbackType callbackType)
 {
- byte* StoragePtr;
+ uint8_t* StoragePtr;
  unsigned referenceTime = millis();
  StoragePtr = memMapper.memoryPtr(0, false);
- byte StorageReason = *StoragePtr++;
+ uint8_t StorageReason = *StoragePtr++;
  if ((StorageReason != 0) && (StorageReason != 255)) // Ansonsten würde da etwas gar nicht stimmen (Sektor leer zB)
  {
   for (int chno = 0; chno < CHANNELCNT; chno++)
@@ -561,7 +561,7 @@ void Appl::RecallAppData(UsrCallbackType callbackType)
 
 void Appl::StoreApplData(UsrCallbackType callbackType)
 {
- byte* StoragePtr;
+ uint8_t* StoragePtr;
  unsigned referenceTime = millis();
  // Kann der Mapper überhaupt die Seite 0 mappen? Checken!
  memMapper.writeMem(0, 0); // writeMem() aktiviert die passende Speicherseite, entgegen zu memoryPtr()
@@ -572,8 +572,8 @@ void Appl::StoreApplData(UsrCallbackType callbackType)
   if ((ReadChConfigByte(chno, APP_OPMODE_O) & APP_OPMODE_M) == 1) // Schaltaktor
   {
    *StoragePtr++ = 0x5A; // 1 Byte
-   byte OldCrc = *StoragePtr;
-   byte NewCrc = crc_calc(bcu.userMemoryPtr(APP_STARTADDR+APP_CHOFFS*chno), APP_CHOFFS);
+   uint8_t OldCrc = *StoragePtr;
+   uint8_t NewCrc = crc_calc(bcu.userMemoryPtr(APP_STARTADDR+APP_CHOFFS*chno), APP_CHOFFS);
    if (callbackType == UsrCallbackType::storeAppDownload)
    {
     if (OldCrc != NewCrc)
@@ -695,7 +695,7 @@ void Appl::ChannelTrigger2RelaySwitch(int chno, TStateAndTrigger &trigger)
  }
 }
 
-byte Appl::IniValueThresholdState(int chno)
+uint8_t Appl::IniValueThresholdState(int chno)
 {
  unsigned short ThLow = ReadChConfigUInt16(chno, APP_SW_THCONST2_O);
  unsigned short ThHigh;
@@ -927,8 +927,8 @@ TStateAndTrigger Appl::ProcessSwitchObj(int objno, int chno)
    bool store = (value & 0x80);
    value &= 63;
    unsigned sceneno;
-   byte cnf;
-   for (byte scenememno=0; scenememno<5; scenememno++)
+   uint8_t cnf;
+   for (uint8_t scenememno=0; scenememno<5; scenememno++)
    {
     cnf = ReadChConfigByte(chno, APP_SW_SCEPRESET1_O+scenememno);
     if ((cnf & APP_SW_SCENEUNUSED_M) == 0)
@@ -982,7 +982,7 @@ TStateAndTrigger Appl::ProcessSwitchObj(int objno, int chno)
  return Result;
 }
 
-void Appl::OneLogicFunction(byte LogicNo, TStateAndTrigger &trigger, int chno)
+void Appl::OneLogicFunction(uint8_t LogicNo, TStateAndTrigger &trigger, int chno)
 {
  if (ReadChConfigByte(chno, APP_SW_LOG1ENA_O+LogicNo*2) & APP_SW_LOG1ENA_M) // Logikfunktion Nummer "LogicNo"+1 freigegeben?
  {
@@ -1757,7 +1757,7 @@ void Appl::OneCurrThresholdFct(int chno, float IMeas, int fctno)
   ScalVal = 0.1f;
  }
  float ThVal = ScalVal * ReadChConfigByte(chno, APP_CURRTH1_O+(APP_CURRTH2_O-APP_CURRTH1_O)*fctno);
- byte HystCnf = ReadChConfigByte(chno, APP_CURRHYST1_O+(APP_CURRTH2_O-APP_CURRTH1_O)*fctno) & APP_CURRHYST1_M;
+ uint8_t HystCnf = ReadChConfigByte(chno, APP_CURRHYST1_O+(APP_CURRTH2_O-APP_CURRTH1_O)*fctno) & APP_CURRHYST1_M;
  if (HystCnf == 0)
   return;
  float Hyst;
@@ -1914,7 +1914,7 @@ void Appl::CurrentFunctions(unsigned referenceTime)
    if (ReadChConfigByte(chno, APP_CURRTHEN_O) & APP_CURRTHEN_M)
    { // Schwellwerte aktiv
     // Wann sollen die Stromgrenzwerte ausgewertet werden?
-    byte EvalCnf = (ReadChConfigByte(chno, APP_CURREVATH_O) & APP_CURREVATH_M) >> APP_CURREVATH_B;
+    uint8_t EvalCnf = (ReadChConfigByte(chno, APP_CURREVATH_O) & APP_CURREVATH_M) >> APP_CURREVATH_B;
     if ((EvalCnf == 3) ||
       ((ChannelStates[chno].CFContCloseBlanking == 0) &&
         ((((EvalCnf == 1) && !RelState)) || ((EvalCnf == 2) && RelState))))
@@ -1941,9 +1941,9 @@ void Appl::CurrentFunctions(unsigned referenceTime)
    // abgestimmt, das genau nach Ende des Blankings ein neu gefiltertes Ergebnis zur Verfügung steht.
    bool ContFailState = ((ChannelStates[chno].CurrFctStates & CFCONTFAILSTATE_M) != 0);
    bool ContOpenCurr = (IMeas > 0.03);
-   byte SendCfg = (ReadChConfigByte(chno, APP_CURRCONTFAILMON_O) & APP_CURRCONTFAILMON_M) >> APP_CURRCONTFAILMON_B;
+   uint8_t SendCfg = (ReadChConfigByte(chno, APP_CURRCONTFAILMON_O) & APP_CURRCONTFAILMON_M) >> APP_CURRCONTFAILMON_B;
    bool UpdFailState = false;
-   byte CFContFBVal = ChannelStates[chno].CFContFailBlanking;
+   uint8_t CFContFBVal = ChannelStates[chno].CFContFailBlanking;
    if (!RelState)
    { // Auswertung nur bei Kontakt offen
     bool OldRelState = ((ChannelStates[chno].CurrFctStates & CFCONTSTATE_M) != 0);
@@ -2045,7 +2045,7 @@ void Appl::CurrentFunctions(unsigned referenceTime)
 //     }
 //    }
 //    //bool Chg = (ContFailState != ((ChannelStates[chno].CurrFctStates & CFCONTFAILSTATE_M) != 0));
-//    byte SendCfg = (ReadChConfigByte(chno, APP_CURRCONTFAILMON_O) & APP_CURRCONTFAILMON_M) >> APP_CURRCONTFAILMON_B;
+//    uint8_t SendCfg = (ReadChConfigByte(chno, APP_CURRCONTFAILMON_O) & APP_CURRCONTFAILMON_M) >> APP_CURRCONTFAILMON_B;
 //    if (Chg) //(((SendCfg == 1) && Chg) || ((SendCfg == 3) && (UpdFailState || Chg)))
 //    {
 //     bcu.comObjects->objectWrite(OFSCHANNELOBJECTS+chno*SPACINGCHANNELOBJECTS+OBJ_CONTACTMON, ContFailState ? 1 : 0);

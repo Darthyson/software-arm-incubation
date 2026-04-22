@@ -11,12 +11,12 @@
 #include <sblib/math.h>
 #include "rc_protocol.h"
 
-int bcd2int(byte bcd)
+int bcd2int(uint8_t bcd)
 {
     return (((bcd & 0xF0) >> 4) * 10 + (bcd & 0x0F));
 }
 
-bool bit_is_set(byte x, byte n)
+bool bit_is_set(uint8_t x, uint8_t n)
 {
     return ((x >> n) & 0x01);
 }
@@ -31,7 +31,7 @@ RCMessage::~RCMessage()
 
 }
 
-RCMessage* RCMessage::GetRCMessageFromTelegram(byte * msg, int msg_len)
+RCMessage* RCMessage::GetRCMessageFromTelegram(uint8_t * msg, int msg_len)
 {
     RCMessage* ret;
     if ((msg_len >= RCParameterMessage::msgLength) && (msg[0] == RCParameterMessage::msgIdentifier))
@@ -122,7 +122,7 @@ bool RCParameterMessage::operator!=(const RCParameterMessage &msg)
     return !operator==(msg);
 }
 
-bool RCParameterMessage::Decode(byte * msg, int msg_len)
+bool RCParameterMessage::Decode(uint8_t * msg, int msg_len)
 {
     _IsValid = false;
     if ((msg_len >= RCParameterMessage::msgLength) && (msg[0] == RCParameterMessage::msgIdentifier))
@@ -248,7 +248,7 @@ bool RCDisplayMessage::operator!=(const RCDisplayMessage &msg)
     return !operator==(msg);
 }
 
-bool RCDisplayMessage::Decode(byte * msg, int msg_len)
+bool RCDisplayMessage::Decode(uint8_t * msg, int msg_len)
 {
     _IsValid = false;
     if ((msg_len >= RCDisplayMessage::msgLength) && (msg[0] == RCDisplayMessage::msgIdentifier))
@@ -299,7 +299,7 @@ RCSwitchDisplayMessage::RCSwitchDisplayMessage()
 
 }
 
-bool RCSwitchDisplayMessage::Decode(byte * msg, int msg_len)
+bool RCSwitchDisplayMessage::Decode(uint8_t * msg, int msg_len)
 {
     // return ((msg_len >= RCSwitchDisplayMessage::msgLength) && (msg[0] == RCSwitchDisplayMessage::msgIdentifier));
     return false;
@@ -310,7 +310,7 @@ RCSwitchToTapWaterRefillMessage::RCSwitchToTapWaterRefillMessage()
 
 }
 
-bool RCSwitchToTapWaterRefillMessage::Decode(byte * msg, int msg_len)
+bool RCSwitchToTapWaterRefillMessage::Decode(uint8_t * msg, int msg_len)
 {
     // return ((msg_len >= RCSwitchToTapWaterRefillMessage::msgLength) && (msg[0] == RCSwitchToTapWaterRefillMessage::msgIdentifier));
     return false;
@@ -321,7 +321,7 @@ RCSwitchToReservoirMessage::RCSwitchToReservoirMessage()
 
 }
 
-bool RCSwitchToReservoirMessage::Decode(byte * msg, int msg_len)
+bool RCSwitchToReservoirMessage::Decode(uint8_t * msg, int msg_len)
 {
     // return ((msg_len >= RCSwitchToReservoirMessage::msgLength) && (msg[0] == RCSwitchToReservoirMessage::msgIdentifier));
     return false;

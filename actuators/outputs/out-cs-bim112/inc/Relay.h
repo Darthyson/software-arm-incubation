@@ -50,7 +50,7 @@ typedef struct
  unsigned short Bits;
 } TRelBuffer;
 
-enum class RelOperatingStates : byte
+enum class RelOperatingStates : uint8_t
 {
  Disable,        // Transienter Zustand nach Start
  MeasMode,     // Durchführen des Vermessungspulses sobald genug Railspannung verfügbar
@@ -59,7 +59,7 @@ enum class RelOperatingStates : byte
  EndState      // Stopzustand
 };
 
-enum class RelSubStates : byte
+enum class RelSubStates : uint8_t
 {
  Idle,   // Idle Zustand
  Pulse,  // Relais werden gerade bestromt

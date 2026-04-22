@@ -12,13 +12,13 @@
  * The channel parameters. 4 bytes per channel.
  * In userEeprom at address 0x01d5
  */
-extern const byte* channelParams;
+extern const uint8_t* channelParams;
 
 /**
  * Channel timing parameters. 1 byte per channel.
  * In userEeprom at address 0x01f6
  */
-extern const byte* channelTimingParams;
+extern const uint8_t* channelTimingParams;
 
 
 /** Command category: input pin changed. */

@@ -31,7 +31,7 @@ static RCDisplayMessage  rcDisplayMsg;  //!< holds the last receive RCDisplayMes
 static int rcMessageLengthWaitingFor;   //!< holds the length of the serial message we are waiting for
 static char CommandWaitingForSend = RC_INVALID_COMMAND; //!< holds the command which we want send between polling (Pollstate = Idle)
 
-bool Write2Serial(byte ch)
+bool Write2Serial(uint8_t ch)
 {
     if (!RaincenterDelayTxTimer.stopped())
     {
@@ -139,13 +139,13 @@ bool ProcessDisplayMsg(const RCDisplayMessage* msg)
 bool RunPollStateMachine(int SerialBytesAvailable)
 {
     bool result = false;
-    static byte *rx;
+    static uint8_t *rx;
 
     if ((SerialBytesAvailable > 0) && (rcMessageLengthWaitingFor > 0) && (SerialBytesAvailable >= rcMessageLengthWaitingFor))
     {
         // delay the next possible serial send, cause raincenter needs a little break
         RaincenterDelayTxTimer.start(RAINCENTER_TX_DELAY_SEND_MS);
-        rx = new byte[SerialBytesAvailable];
+        rx = new uint8_t[SerialBytesAvailable];
         serial.readBytes(&rx[0], SerialBytesAvailable);
         RCMessage* msg;
 

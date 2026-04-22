@@ -48,18 +48,18 @@ unsigned int calculateTime(int base, int factor);
  * The channel parameters. 4 bytes per channel.
  * In userEeprom at address 0x01d5
  */
-extern const byte* channelParams;
+extern const uint8_t* channelParams;
 
 /**
  * LED parameters
  * In userEeprom at address 0x01ED
  */
-extern const byte* LEDparams;
+extern const uint8_t* LEDparams;
 
 /**
  * pointer to the configuration of the currently evaluated channel
  */
-extern const byte* params;
+extern const uint8_t* params;
 
 extern Timeout timeout[NUM_CHANNELS * 2];
 extern unsigned int delayTime[NUM_CHANNELS * 2];

@@ -45,7 +45,7 @@ APP_VERSION("SBin8_12", "1", "11") // Don't forget to also change the build-vari
 // Debouncers for inputs
 Debouncer inputDebouncer[NUM_CHANNELS];
 
-const byte* channelParams;
+const uint8_t* channelParams;
 
 #ifdef DIRECT_IO
 // Input pins

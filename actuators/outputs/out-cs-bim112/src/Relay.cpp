@@ -768,7 +768,7 @@ bool Relay::DoSwitching(unsigned time, unsigned &RelDriverData)
 
 unsigned int Relay::GetData(void *data)
 {
- byte* ptr=(byte *)data;
+ uint8_t* ptr=(uint8_t *)data;
  unsigned RdPtr = BufRdPtr;
  PtrWrUint16(ptr, ChRealSwStatus);
  ptr+=2;
@@ -793,7 +793,7 @@ unsigned int Relay::GetData(void *data)
  return (RELAYBUFLEN-1)*4+2*2; // 20 Bytes bei 4 Kanälen, 28 bei 6, 36 bei 8 Kanälen
 }
 
-inline unsigned short RelayStorageRd16(byte* &ptr, bool &Fail, unsigned short unusedmask)
+inline unsigned short RelayStorageRd16(uint8_t* &ptr, bool &Fail, unsigned short unusedmask)
 {
  unsigned short data = PtrRdUint16(ptr);
  if (data & unusedmask)
@@ -804,7 +804,7 @@ inline unsigned short RelayStorageRd16(byte* &ptr, bool &Fail, unsigned short un
 
 unsigned int Relay::SetData(void *data)
 {
- byte* ptr=(byte *)data;
+ uint8_t* ptr=(uint8_t *)data;
  unsigned short rdata;
  unsigned unusedmask = ~((1 << CHANNELCNT)-1);
  bool fail = false;

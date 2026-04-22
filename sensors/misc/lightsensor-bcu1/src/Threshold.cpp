@@ -51,7 +51,7 @@ void Threshold::test(float tempValue, bool periodic) {
     if (action == GRENZWERT_REAKTION_DEACTIVATED) return;
     float value = tempValue;
     if (value > trigger && action & Action_above) {
-        byte v = action & Value_above? 1 : 0;
+        uint8_t v = action & Value_above? 1 : 0;
         if (currentValue != Value_above || periodic) {
             // only send changes unless we updating periodically
             LOG("#%d value %d is above threshold %d, so sending %d",
@@ -62,7 +62,7 @@ void Threshold::test(float tempValue, bool periodic) {
         return;
     }
     if (value < trigger && action & Action_below) {
-        byte v = action & Value_below? 1 : 0;
+        uint8_t v = action & Value_below? 1 : 0;
         if (currentValue != Value_below || periodic) {
             // only send changes unless we updating periodically
             LOG("#%d value %d is below threshold %d, so sending %d",

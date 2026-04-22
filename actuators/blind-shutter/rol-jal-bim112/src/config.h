@@ -38,7 +38,7 @@ typedef struct
 {
     unsigned int noOfChannels;  //!> how many channels are supported with this hardware
     unsigned short baseAddress; //!> Base address of the config parameters
-    byte hardwareVersion[6];    //!> The hardware identification number. Must match the product_serial_number in the VD's table hw_product
+    uint8_t hardwareVersion[6];    //!> The hardware identification number. Must match the product_serial_number in the VD's table hw_product
 } HardwareVersion;
 
 
