@@ -156,7 +156,7 @@ void initApplication(void)
     {
         unsigned int value;
         int configBase = currentVersion->baseAddress + 4 + i * 46;
-        word channelType = bcu.userEeprom->getUInt16(configBase);
+        uint16_t channelType = bcu.userEeprom->getUInt16(configBase);
         Channel * channel;
         inputs.checkInput(i, &value);
         //leds.setStatus(i, value);
