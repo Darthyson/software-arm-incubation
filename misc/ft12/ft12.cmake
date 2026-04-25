@@ -1,0 +1,12 @@
+set(FT12_SRC
+    src/app_main.cpp
+    src/bcu_ft12.h
+    src/bcu_ft12.cpp
+    src/config.h
+    src/cr_cpp_config.cpp
+    src/cr_startup_lpc11xx.cpp
+    src/debug_handler.cpp
+    src/debug_handler.h
+    src/ft12_protocol.cpp
+    src/ft12_protocol.h
+)
