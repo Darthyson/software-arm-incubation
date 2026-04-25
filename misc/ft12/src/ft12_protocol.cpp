@@ -20,7 +20,7 @@
  ---------------------------------------------------------------------------*/
 
 #include "ft12_protocol.h"
-#include "debug_handler.h"
+//#include "debug_handler.h"
 
 uint8_t controlFieldToByte(const FtControlField& cf)
 {
@@ -48,16 +48,16 @@ uint8_t controlFieldToByte(const FtControlField& cf)
 
 FtControlField controlFieldFromByte(const uint8_t& controlByte)
 {
-    FtControlField cf;
+    FtControlField cf{};
     cf.fromBCUtoDevice = controlByte & 0x80;    // DIR bit 7 (physical transmission direction)
     cf.isRequest = controlByte & 0x40;          // PRM bit 6 (primary message)
     cf.frameCountBit = controlByte & 0x20;      // FCB bit 5 (frame count bit)
     cf.frameCountBitValid = controlByte & 0x10; // FCV bit 4 (frame count bit valid)
-    cf.functionCode = (FtFunctionCode)(controlByte & 0x0f); // bit 0-3 function code
-    return (cf);
+    cf.functionCode = static_cast<FtFunctionCode>(controlByte & 0x0f); // bit 0-3 function code
+    return cf;
 }
 
-FtError isValidFixedFrameHeader(const uint8_t* frame, uint8_t frameLength)
+FtError isValidFixedFrameHeader(const uint8_t* frame, const uint8_t frameLength)
 {
     // check length too short
     if (frameLength < FIXED_FRAME_LENGTH)
@@ -103,7 +103,7 @@ uint8_t calcCheckSum(const uint8_t* frame, const uint8_t& userDataLength)
     return checkSum;
 }
 
-FtError isValidVariableFrameHeader(const uint8_t* frame, uint8_t frameLength)
+FtError isValidVariableFrameHeader(const uint8_t* frame, const uint8_t frameLength)
 {
     if (frameLength < VARIABLE_FRAME_HEADER_LENGTH)
     {
@@ -132,7 +132,7 @@ FtError isValidVariableFrameHeader(const uint8_t* frame, uint8_t frameLength)
         return FtError::FT_INVALID_END;
     }
 
-    uint8_t userDataLength = frame[1];
+    const uint8_t userDataLength = frame[1];
     if (frameLength != (userDataLength + VARIABLE_FRAME_HEADER_LENGTH))
     {
         // length mismatch

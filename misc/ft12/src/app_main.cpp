@@ -23,18 +23,18 @@
 
 APP_VERSION("SBft12  ", "0", "02")  // Don't forget to also change the build-variable sw_version
 
-BcuFt12 bcuFt12 = BcuFt12();  //!< Bus coupling unit Maskversion 0x0012 of the ft12 module
+auto bcuFt12 = BcuFt12();  //!< Bus coupling unit Mask version 0x0012 of the ft12 module
 
 /** ft12 bit timeout converted in milliseconds */
 constexpr uint32_t ft12ExchangeTimeoutMs = 2 * ((FT12_EXCHANGE_TIMEOUT_BITS * 1000/FT_BAUDRATE) + 1);
 /** ft12 line idle timeout converted in milliseconds */
 constexpr uint32_t ft12LineIdleTimeoutMs = 2 * ((FT12_LINE_IDLE_TIMEOUT_BITS * 1000/FT_BAUDRATE) + 1);
 
-uint8_t ftFrameIn[FT_FRAME_SIZE] = {0};        //!< Buffer for incoming FT1.2 frames
-uint8_t ftFrameInLen = 0;                   //!< Length of the data in ftFrameIn
-uint8_t ftFrameOut[FT_FRAME_SIZE] = {0};       //!< Buffer for preparing FT1.2 frames to send to serial port
-uint8_t ftFrameOutBuffer[FT_FRAME_SIZE] = {0}; //!< Buffer for outgoing FT1.2 frames which are waiting an ACK
-uint8_t ftFrameOutBufferLength = 0;         //!< Length of the data in ftFrameOutBuffer
+uint8_t ftFrameIn[FT_FRAME_SIZE] = {};        //!< Buffer for incoming FT1.2 frames
+uint8_t ftFrameInLen = 0;                     //!< Length of the data in ftFrameIn
+uint8_t ftFrameOut[FT_FRAME_SIZE] = {};       //!< Buffer for preparing FT1.2 frames to send to serial port
+uint8_t ftFrameOutBuffer[FT_FRAME_SIZE] = {}; //!< Buffer for outgoing FT1.2 frames which are waiting an ACK
+uint8_t ftFrameOutBufferLength = 0;           //!< Length of the data in ftFrameOutBuffer
 
 int16_t repeatCounter = 0;                  //! Decrement on every repeat until its zero, initialized with @ref FT12_REPEAT_LIMIT
 
@@ -52,8 +52,8 @@ FtFrameType frameType = FT_NONE;
 
 bool ackPending()
 {
-    auto stopped = ft12AckTimeout.stopped();
-    auto expired = ft12AckTimeout.expired();
+    const auto stopped = ft12AckTimeout.stopped();
+    const auto expired = ft12AckTimeout.expired();
     return !stopped && !expired;
 }
 
@@ -95,7 +95,7 @@ uint8_t * getFtFrameOut()
 /**
  * Sends a @ref FT_ACK
  */
-void sendft12Ack()
+void sendFt12Ack()
 {
     serial.write(FT_ACK);
     serial.flush();
@@ -107,7 +107,7 @@ void sendft12Ack()
  * @param frame     ft12 frame to send
  * @param frameSize size of the frame
  */
-void sendft12withAckWaiting(uint8_t* frame, const int32_t frameSize)
+void sendFt12withAckWaiting(uint8_t* frame, const int32_t frameSize)
 {
     FtControlField cf  = controlFieldFromByte(frame[4]);
     if (cf.frameCountBitValid && ackPending())
@@ -140,7 +140,7 @@ void sendft12withAckWaiting(uint8_t* frame, const int32_t frameSize)
     digitalWrite(LED_SERIAL_RX, LED_ON);
 }
 
-void sendft12RepeatedFrame()
+void sendFt12RepeatedFrame()
 {
     if (ftFrameOutBufferLength == 0)
     {
@@ -176,16 +176,11 @@ void sendFixedFrame(uint8_t* frame, const FtFunctionCode& funcCode)
     }
 
     frame[0] = FT_FIXED_START;
-    FtControlField cf;
-    cf.fromBCUtoDevice = true;
-    cf.isRequest = true;
-    cf.frameCountBit = false;
-    cf.frameCountBitValid = false;
-    cf.functionCode = funcCode;
+    const FtControlField cf = { true, true, false, false, funcCode };
     frame[1] = controlFieldToByte(cf);
     frame[2] = frame[1];
     frame[3] = FT_END;
-    sendft12withAckWaiting(frame, FIXED_FRAME_LENGTH);
+    sendFt12withAckWaiting(frame, FIXED_FRAME_LENGTH);
 }
 
 /**
@@ -210,16 +205,16 @@ BcuBase* setup()
     pinMode(PIN_FT_SERIAL_RX, SERIAL_RXD | PULL_UP | HYSTERESIS);
     serial.begin(FT_BAUDRATE, SERIAL_8E1);
     reset();
-    return (&bcuFt12);
+    return &bcuFt12;
 }
 
 
 /**
- * This is a VERY VERY dirty hack to replace the KNX sender address 0.0.0 with 15.15.255 for @ref APCI_INDIVIDUAL_ADDRESS_RESPONSE_PDU
+ * This is a VERY, VERY dirty hack to replace the KNX sender address 0.0.0 with 15.15.255 for @ref APCI_INDIVIDUAL_ADDRESS_RESPONSE_PDU
  * Older ARM Selfbus devices with clean flash have the default KNX-address 0.0.0 which is not allowed in KNX specification so e.g. knxd ignores their response.
  * Even KNX-address programming with a broadcasted @ref APCI_INDIVIDUAL_ADDRESS_READ_PDU will fail.
  *
- * @warning This is a VERY VERY dirty hack and not even close to KNX spec!
+ * @warning This is a VERY, VERY dirty hack and not even close to KNX spec!
  *
  * @param frame          The buffer that contains the frame
  * @param funcCode       The function code, e.g. FC_SEND_UDAT
@@ -237,32 +232,32 @@ bool dirtyCheckAndReplaceInvalidDefaultSenderAddress(uint8_t* frame, const FtFun
     // user data indication with length 10?
     if ((emi != L_Data_Ind) || (userDataLength != 0x0A) || ((funcCode & 0x0f) != FC_SEND_UDAT))
     {
-        return (false);
+        return false;
     }
 
     // check 0.0.0 for KNX sender and destination address
     if ((frame[7] != 0) || (frame[8] != 0) || (frame[9] != 0) || (frame[10] != 0))
     {
-        return (false);
+        return false;
     }
 
     // is apci command = APCI_INDIVIDUAL_ADDRESS_RESPONSE_PDU ??
     if (makeWord(frame[12], frame[13]) != APCI_INDIVIDUAL_ADDRESS_RESPONSE_PDU)
     {
-        return (false);
+        return false;
     }
 
     // is response length = 1??
     if ((frame[11] & 0x0f) != 1) // response length in low nibble
     {
-        return (false);
+        return false;
     }
 
     // okay seems like we had a bad day
     // -> inject sender address 15.15.255
     frame[7] = 0xff;
     frame[8] = 0xff;
-    return (true);
+    return true;
 }
 
 /**
@@ -283,16 +278,10 @@ void sendVariableFrame(uint8_t* frame, const FtFunctionCode& funcCode, const Emi
         return;
     }
 
-    // This is a VERY VERY dirty hack for older Selfbus devices with default knx address 0.0.0
+    // This is a VERY, VERY dirty hack for older Selfbus devices with default knx address 0.0.0
     dirtyCheckAndReplaceInvalidDefaultSenderAddress(frame, funcCode, emi, userDataLength);
 
-    FtControlField cf;
-    cf.fromBCUtoDevice = true;
-    cf.isRequest = true;
-    cf.frameCountBit = sendFrameCountBit;
-    cf.frameCountBitValid = true;
-    cf.functionCode = funcCode;
-
+    const FtControlField cf { true, true, sendFrameCountBit, true, funcCode };
     frame[0] = FT_VARIABLE_START;
     frame[1] = userDataLength;
     frame[2] = userDataLength;
@@ -302,7 +291,7 @@ void sendVariableFrame(uint8_t* frame, const FtFunctionCode& funcCode, const Emi
 
     frame[4 + userDataLength] = calcCheckSum(frame, userDataLength);
     frame[5 + userDataLength] = FT_END;
-    sendft12withAckWaiting(frame, userDataLength + VARIABLE_FRAME_HEADER_LENGTH);
+    sendFt12withAckWaiting(frame, userDataLength + VARIABLE_FRAME_HEADER_LENGTH);
 }
 
 /**
@@ -311,9 +300,9 @@ void sendVariableFrame(uint8_t* frame, const FtFunctionCode& funcCode, const Emi
  * @param frame - 4 byte Buffer containing the fixed length frame to process
  * @note KNX Spec. 2.1 3/6/2 6.4.3.2 p.23ff
  */
-bool processFixedFrame(uint8_t* frame)
+bool processFixedFrame(const uint8_t* frame)
 {
-    FtControlField cf  = controlFieldFromByte(frame[1]);
+    const FtControlField cf  = controlFieldFromByte(frame[1]);
 
     if (!cf.isRequest)
     {
@@ -326,25 +315,26 @@ bool processFixedFrame(uint8_t* frame)
         case FC_SEND_RESET:
             reset();
             return true;
-            break;
+
         case FC_REQ_STATUS:
             return true; ///\todo FC_REQ_STATUS
-            break;
+
         default:
             debugFatal();
             return false;
     }
-    return true;
+
 }
 
 /**
- * Process a L_DataConnected request in frame[]
+ * Process an L_DataConnected request in frame[]
  */
-void processDataConnectedRequest(const uint8_t * frame, uint8_t frameLength)
+void processDataConnectedRequest(const uint8_t * frame, const uint8_t frameLength)
 {
     constexpr uint16_t version = 0x0012;
     uint8_t * buffer;
-    uint16_t apci = makeWord(frame[12], frame[13]);    
+
+    const uint16_t apci = makeWord(frame[12], frame[13]);
     switch (apci)
     {
         case APCI_DEVICEDESCRIPTOR_READ_PDU:
@@ -359,16 +349,16 @@ void processDataConnectedRequest(const uint8_t * frame, uint8_t frameLength)
             break;
 
         default:
-           break;
+            break;
     }
 }
 
 /**
  * Process a variable length FT frame
  */
-bool processVariableFrame(uint8_t* frame, uint8_t length)
+bool processVariableFrame(uint8_t* frame, const uint8_t length)
 {
-    FtControlField cf  = controlFieldFromByte(frame[4]);
+    const FtControlField cf  = controlFieldFromByte(frame[4]);
 
     if (cf.functionCode != FC_SEND_UDAT)
     {
@@ -376,7 +366,7 @@ bool processVariableFrame(uint8_t* frame, uint8_t length)
         return false;
     }
 
-    uint8_t checkSum = frame[length - 2];
+    const uint8_t checkSum = frame[length - 2];
     if (!cf.frameCountBitValid)
     {
         debugFatal();
@@ -397,7 +387,7 @@ bool processVariableFrame(uint8_t* frame, uint8_t length)
     lastCheckSum = checkSum;
 
     uint8_t * buffer;
-    EmiCode emi = (EmiCode)frame[5]; //1. PEI_Switch_Req
+    auto emi = static_cast<EmiCode>(frame[5]); //1. PEI_Switch_Req
     switch (emi)  // EMI code
     {
     case PEI_Identify_Req: // KNX Spec. 3/6/3 3.3.9.5 p.54
@@ -436,17 +426,17 @@ bool processVariableFrame(uint8_t* frame, uint8_t length)
 
     case L_Data_Req: // KNX Spec. 2.1 3/6/3 3.3.4.2 p.20
     {
-        uint8_t userDataLength = frame[1];
-        uint8_t emiControl = frame[VARIABLE_FRAME_HEADER_LENGTH];
+        const uint8_t userDataLength = frame[1];
+        const uint8_t emiControl = frame[VARIABLE_FRAME_HEADER_LENGTH];
         // read requested priority
-        uint8_t priority = (emiControl & 0x0c);
-        bool ackRequest = (emiControl & 0x02);
+        const uint8_t priority = emiControl & 0x0c;
+        const bool ackRequest = emiControl & 0x02;
 
         if (ackRequest != ((bcuFt12.userRam->status() & BCU_STATUS_LINK_LAYER) == BCU_STATUS_LINK_LAYER))
         {
-            //\todo doesn´t work right now with our Updater, which does no ft12 link configuration
+            //\todo doesn't work right now with our Updater, which does no ft12 link configuration
             // match data link layer and ackRequest
-            //bcu.userRam->status() ^= BCU_STATUS_LINK_LAYER | BCU_STATUS_PARITY;
+            //bcuFt12.userRam->status() ^= BCU_STATUS_LINK_LAYER | BCU_STATUS_PARITY;
         }
 
         buffer = getFtFrameOut();
@@ -497,14 +487,14 @@ void loop()
         digitalWrite(LED_KNX_RX, LED_OFF);
     }
 
-    int32_t byte;
-    while ((byte = serial.read()) > -1)
+    int32_t rxByte;
+    while ((rxByte = serial.read()) > -1)
     {
         lastSerialRecvTime = millis();
-        // start byte / frame detection, fixed or variable frame or just a ack
+        // start byte / frame detection, fixed or variable frame or just an ack
         if (frameType == FT_NONE)
         {
-            switch (byte)
+            switch (rxByte)
             {
                 case FT_ACK:
                 {
@@ -526,7 +516,6 @@ void loop()
                 case 0xA0:
                     reset();
                     continue;
-                    break;
                 default:
                     debugFatal();
                     frameType = FT_NONE; // we should never land here, otherwise something is really wrong
@@ -542,21 +531,20 @@ void loop()
             continue;
         }
 
-        ftFrameIn[ftFrameInLen++] = byte;
+        ftFrameIn[ftFrameInLen++] = rxByte;
 
-        if (byte != FT_END)
+        if (rxByte != FT_END)
         {
             continue;
         }
 
         if (frameType == FT_FIXED_START)
         {
-            FtError ftError = isValidFixedFrameHeader(&ftFrameIn[0], ftFrameInLen);
+            const FtError ftError = isValidFixedFrameHeader(&ftFrameIn[0], ftFrameInLen);
             switch (ftError)
             {
                 case FtError::FT_TOO_SHORT:
                     continue;
-                    break;
 
                 case FtError::FT_TOO_LONG:
                 case FtError::FT_INVALID_START:
@@ -567,10 +555,10 @@ void loop()
                     break;
 
                 case FtError::FT_NO_ERROR:
-                    sendft12Ack();
+                    sendFt12Ack();
                     if (ackPending())
                     {
-                        //todo this may happen, see sendft12withAckWaiting(..) for details
+                        //todo this may happen, see sendFt12withAckWaiting(..) for details
                         //debugFatal();
                     }
                     if (!processFixedFrame(&ftFrameIn[0]))
@@ -588,12 +576,11 @@ void loop()
         }
         else if (frameType == FT_VARIABLE_START)
         {
-            FtError ftError = isValidVariableFrameHeader(&ftFrameIn[0], ftFrameInLen);
+            const FtError ftError = isValidVariableFrameHeader(&ftFrameIn[0], ftFrameInLen);
             switch (ftError)
             {
                 case FtError::FT_TOO_SHORT:
                     continue;
-                    break;
 
                 case FtError::FT_TOO_LONG:
                 case FtError::FT_INVALID_START:
@@ -605,10 +592,10 @@ void loop()
                     break;
 
                 case FtError::FT_NO_ERROR:
-                    sendft12Ack();
+                    sendFt12Ack();
                     if (ackPending())
                     {
-                        //todo this may happen, see sendft12withAckWaiting(..) for details
+                        //todo this may happen, see sendFt12withAckWaiting(..) for details
                         //debugFatal();
                     }
                     if (!processVariableFrame(&ftFrameIn[0], ftFrameInLen))
@@ -628,13 +615,13 @@ void loop()
 
     if (ft12AckTimeout.expired())
     {
-        sendft12RepeatedFrame();
+        sendFt12RepeatedFrame();
     }
 
     if (bcuFt12.bus->telegramReceived() && !ackPending())
     {
         digitalWrite(LED_KNX_RX, LED_ON);
-        knxRxTimeout.start(LED_KNX_RX_BLINKTIME);
+        knxRxTimeout.start(LED_KNX_RX_BLINK_TIME_MS);
         if (ftFrameOutBufferLength == 0)
         {
             processTelegram();

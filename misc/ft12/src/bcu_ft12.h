@@ -8,7 +8,7 @@
  *
  * @{
  *
- * @file   ft12_bcu.h
+ * @file   bcu_ft12.h
  * @author Darthyson <darth@maptrack.de> Copyright (c) 2022
  * @bug No known bugs.
  ******************************************************************************/
@@ -24,20 +24,20 @@
 
 #include <sblib/eib/userRamBCU1.h>
 #include <sblib/eib/bcu_base.h>
-#include <sblib/eib/bus.h>
+
 
 class BcuFt12: public BcuBase
 {
 public:
     BcuFt12();
-    BcuFt12(UserRamBCU1* userRamBcu1);
-    ~BcuFt12() = default;
+    explicit BcuFt12(UserRamBCU1* userRamBcu1);
+    ~BcuFt12() override = default;
     void begin();
-    bool applicationRunning() const override {return (enabled);}
+    [[nodiscard]] bool applicationRunning() const override {return enabled;}
     uint8_t& layerStatus() override;
 
 protected:
-    bool processApci(ApciCommand apciCmd, unsigned char * telegram, uint8_t telLength, uint8_t * sendBuffer);
+    bool processApci(ApciCommand apciCmd, unsigned char * telegram, uint8_t telLength, uint8_t * sendBuffer) override;
     bool processGroupAddressTelegram(ApciCommand apciCmd, uint16_t groupAddress, unsigned char *telegram, uint8_t telLength) override;
     bool processBroadCastTelegram(ApciCommand apciCmd, unsigned char *telegram, uint8_t telLength) override;
 };

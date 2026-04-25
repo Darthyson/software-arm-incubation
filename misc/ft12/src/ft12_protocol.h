@@ -21,7 +21,7 @@
 #ifndef FT12_PROTOCOL_H_
 #define FT12_PROTOCOL_H_
 
-#include <stdint.h>
+#include <cstdint>
 
 #define FT12_EXCHANGE_TIMEOUT_BITS (510)  //!< Time-out for end of exchange in case of SEND/CONFIRM or REQUEST/RESPOND (KNX Spec. 2.1 3/6/2 6.4.8 p.29)
 #define FT12_REPEAT_LIMIT (3)             //!< Repeat limit the retransmissions due to transmission errors (KNX Spec. 2.1 3/6/2 6.4.8 p.29)

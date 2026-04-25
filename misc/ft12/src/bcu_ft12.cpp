@@ -32,7 +32,7 @@ BcuFt12::BcuFt12(UserRamBCU1* userRamBcu1) :
 
 bool BcuFt12::processApci(ApciCommand apciCmd, unsigned char * telegram, uint8_t telLength, uint8_t * sendBuffer)
 {
-    return (false);
+    return false;
 }
 
 void BcuFt12::begin()
@@ -44,12 +44,12 @@ void BcuFt12::begin()
 
 bool BcuFt12::processBroadCastTelegram(ApciCommand apciCmd, unsigned char *telegram, uint8_t telLength)
 {
-    return (true);
+    return true;
 }
 
 bool BcuFt12::processGroupAddressTelegram(ApciCommand apciCmd, uint16_t groupAddress, unsigned char *telegram, uint8_t telLength)
 {
-    return (true);
+    return true;
 }
 
 uint8_t& BcuFt12::layerStatus()
