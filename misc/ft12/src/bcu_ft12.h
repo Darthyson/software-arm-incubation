@@ -33,7 +33,7 @@ public:
     explicit BcuFt12(UserRamBCU1* userRamBcu1);
     ~BcuFt12() override = default;
     void begin();
-    [[nodiscard]] bool applicationRunning() const override {return enabled;}
+    [[nodiscard]] bool applicationRunning() const override { return enabled; }
     uint8_t& layerStatus() override;
 
 protected:

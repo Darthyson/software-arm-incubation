@@ -27,8 +27,22 @@
 #define FT12_REPEAT_LIMIT (3)             //!< Repeat limit the retransmissions due to transmission errors (KNX Spec. 2.1 3/6/2 6.4.8 p.29)
 #define FT12_LINE_IDLE_TIMEOUT_BITS (33)  //!< maximum bit-time between two characters, minimum line idle time before an error is detected
 
+#define FT_FRAME_SIZE               (32)  //!< Maximum size of FT1.2 frames
+
 #define FIXED_FRAME_LENGTH (4)            //!< Length of a fixed ft12 frame
 #define VARIABLE_FRAME_HEADER_LENGTH (6)  //!< Header length of a variable ft12 frame
+
+/** 
+ * \brief Minimum user data length of a variable frame, including the control field.
+ * \note KNX Spec. 3.0 3/6/2 6.4.3.3.1 p.23 Frame format
+ */
+constexpr uint8_t VARIABLE_FRAME_USER_DATA_LENGTH_MIN = 2;
+
+/** 
+ * \brief Maximum user data length of a variable frame, including the control field.
+ * \note KNX Spec. 3.0 3/6/2 6.4.3.3.1 p.23 Frame format 
+ */
+constexpr uint8_t VARIABLE_FRAME_USER_DATA_LENGTH_MAX = 24;
 
 constexpr int16_t InvalidCheckSum = -1;  //!< Invalid checksum
 
@@ -51,20 +65,21 @@ enum FtFrameType
 {
     FT_NONE           = 0x00, //!< none / unspecified
     FT_FIXED_START    = 0x10, //!< start byte of a frame with fixed length
-    FT_END            = 0x16, //!< end byte of a frame with fixed length
+    FT_END            = 0x16, //!< end byte of a frame
     FT_VARIABLE_START = 0x68, //!< start byte of a frame with variable length
     FT_ACK            = 0xe5, //!< positive acknowledgment
 };
 
 /**
  * FT control field code
- * @note KNX Spec. 2.1 3/6/2 6.4.4 p.25ff
+ * @note KNX Spec. 3.0 3/6/2 6.4.4 p.25ff
  */
 enum FtFunctionCode
 {
-    FC_SEND_RESET = 0x00,  //!< Reset the remote link
-    FC_SEND_UDAT  = 0x03,  //!< User data
-    FC_REQ_STATUS = 0x09,  //!< Request status of link
+    FC_SEND_RESET = 0x00,     //!< Reset the remote link
+    FC_SEND_UDAT  = 0x03,     //!< User data
+    FC_REQ_STATUS = 0x09,     //!< Request status of link
+    FC_RESPOND_STATUS = 0x0b, //!< Respond status of link
 };
 
 /**
@@ -80,10 +95,10 @@ struct FtControlField
     FtFunctionCode functionCode; //!< ft12 function code e.g. @ref FC_SEND_RESET
 };
 
-
 /**
- * External message interface codes
- * @details - DLL = Data Link Layer
+ * \brief External message interface codes
+ * \details Abbreviations:
+ *          - DLL = Data Link Layer
  *          - NL  = Network Link Layer
  *          - TL  = Transport Layer
  *          - TLG = Transport Layer Group oriented
@@ -93,8 +108,7 @@ struct FtControlField
  *          - MAN = Application Layer Management part
  *          - PEI = Physical External Interface
  *          - USR = Application running in BCU, if User not running message directed to PEI
- *
- * @note KNX Spec. 2.1 3/6/3 2 Message format p. 6ff
+ * @note KNX Spec. 3.0 3/6/3 2 Message Format p. 6ff
  */
 enum EmiCode
 {
