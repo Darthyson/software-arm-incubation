@@ -22,6 +22,7 @@
 #ifndef BCU_FT12_H_
 #define BCU_FT12_H_
 
+#include "ft12_protocol.h"
 #include <sblib/eib/userRamBCU1.h>
 #include <sblib/eib/bcu_base.h>
 
@@ -36,10 +37,21 @@ public:
     [[nodiscard]] bool applicationRunning() const override { return enabled; }
     uint8_t& layerStatus() override;
 
+    /**
+     * @brief Handles the PEI switch request.
+     * @param payload  The buffer holding the payload of the PEI switch request, starting with System Status (octet 2)
+     * @param length   The length of the payload buffer. Must be 6 for a PEI_Switch.req.
+     * @note  KNX Spec. 3.0 3/6/3 3.3.9.7 p.57ff
+     */
+    void handlePeiSwitchRequest(const uint8_t* payload, uint8_t length);
 protected:
     bool processApci(ApciCommand apciCmd, unsigned char * telegram, uint8_t telLength, uint8_t * sendBuffer) override;
     bool processGroupAddressTelegram(ApciCommand apciCmd, uint16_t groupAddress, unsigned char *telegram, uint8_t telLength) override;
     bool processBroadCastTelegram(ApciCommand apciCmd, unsigned char *telegram, uint8_t telLength) override;
+private:
+    void dumpLayerRedirection() const;
+
+    Emi2LayerRedirection layerRedirection;
 };
 
 

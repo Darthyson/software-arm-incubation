@@ -17,7 +17,7 @@
 #define PIN_FT_SERIAL_TX            PIN_TX //!< Serial-Tx pin
 #define PIN_FT_SERIAL_RX            PIN_RX //!< Serial-Rx pin
 
-#define LED_KNX_RX_BLINK_TIME_MS    100   //!< Receiving KNX packets blinking timeout in milliseconds
+#define LED_KNX_RX_BLINK_TIME_MS    100    //!< Receiving KNX packets blinking timeout in milliseconds
 
 #define FT_OWN_KNX_ADDRESS          0x11fe //!< Our own physical KNX address: 1.1.254
 #define FT12_BAUD_RATE              SERIAL_BAUD_RATE_19200 //!< Ft12 baudrate

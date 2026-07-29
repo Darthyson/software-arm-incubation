@@ -11,6 +11,7 @@
 #include <sblib/digital_pin.h>
 #include <sblib/io_pin_names.h>
 #include <sblib/timeout.h>
+#include <sblib/eib/knx_lpdu.h>
 #include <sblib/eib/apci.h>
 #include <sblib/serial.h>
 #include <sblib/bits.h>
@@ -51,7 +52,7 @@ int16_t lastCheckSum = InvalidCheckSum;
 Timeout ft12AckTimeout;     //!< waiting for ft12 ACK timeout
 Timeout knxRxTimeout;       //!< KNX-Rx LED blinking timeout
 
-FtFrameType frameType = FT_NONE;
+FtFrameType ftFrameType = FT_NONE;
 
 bool ackPending()
 {
@@ -71,7 +72,7 @@ void resetTx()
 void resetRx()
 {
     ftFrameInLen = 0;
-    frameType = FT_NONE;
+    ftFrameType = FT_NONE;
     lastSerialRecvTime = 0;
     lastCheckSum = InvalidCheckSum;
 }
@@ -110,8 +111,9 @@ uint8_t * getFtFrameOut()
 void sendFt12Ack()
 {
     serial.write(FT_ACK);
-    serial.flush();
+    serial.flush(); /// Don't buffer the ACK, send it right now
     digitalWrite(LED_SERIAL_RX, LED_OFF);
+    dump(softUART.println("<-A"));
 }
 
 /**
@@ -136,6 +138,8 @@ void sendFt12withAckWaiting(uint8_t* frame, const int32_t frameSize)
         // E.g. non-blocking TL4 T_ACK followed by blocking T_DataConnected within
         // #68#09#09#68 #73#11#00#00#00#FF#C0#60#C2#65#16 (calimero log: sending FT1.2 frame, non-blocking, attempt 1)
         // #68#17#17#68 #53#11#0C#00#00#FF#C0#6E#46#F8#BF#3D#90#02#13#49#84#5E#AF#67#AB#F5#5D#BA#16 (calimero log: sending FT1.2 frame, blocking, attempt 1)
+        // Maybe this is a bug in calimero related to https://github.com/calimero-project/calimero-core/issues/91
+
         //debugFatal();
         uint8_t operand;
         if (cf.frameCountBit) // we flip 5.bit, so calculate new checksum
@@ -159,7 +163,7 @@ void sendFt12withAckWaiting(uint8_t* frame, const int32_t frameSize)
     lastSerialSendTime = millis();
     ft12AckTimeout.start(ft12ExchangeTimeoutMs);
     digitalWrite(LED_SERIAL_RX, LED_ON);
-    dump(softUART.println("Tx ", ftFrameOutBufferLength);)
+    dump(softUART.print("<-Tx ", ftFrameOutBufferLength);)
 }
 
 void sendFt12RepeatedFrame()
@@ -227,6 +231,13 @@ BcuBase* setup()
     dump(
         softUART.begin();
         softUART.println("Selfbus ft12");
+        softUART.println("-> = Rx (Receive)");
+        softUART.println("<- = Tx (Transmit)");
+        softUART.println("A  = ACK (EMI)");
+
+
+        softUART.println("------------------");
+
     )
 
     bcuFt12.begin(); // bcu.userRam->status is set in BcuFt12::begin()
@@ -345,6 +356,7 @@ void sendVariableFrame(uint8_t* frame, const FtFunctionCode& funcCode, const Emi
  */
 bool processFixedFrame(const uint8_t* frame)
 {
+    dump(softUART.print("->Rx ");)
     const FtControlField cf  = controlFieldFromByte(frame[1]);
 
     if (!cf.isRequest)
@@ -376,7 +388,7 @@ bool processFixedFrame(const uint8_t* frame)
 /**
  * Process an L_DataConnected request in frame[]
  */
-void processDataConnectedRequest(const uint8_t * frame, const uint8_t frameLength)
+void handleDataConnectedRequest(const uint8_t * frame, const uint8_t frameLength)
 {
     if (frameLength < 14)
     {
@@ -408,9 +420,10 @@ void processDataConnectedRequest(const uint8_t * frame, const uint8_t frameLengt
 /**
  * Process a variable length FT frame
  */
-bool processVariableFrame(uint8_t* frame, const uint8_t length)
+bool processVariableFrame(const uint8_t* emiFrame, const uint8_t emiFrameLength)
 {
-    const FtControlField cf  = controlFieldFromByte(frame[4]);
+    dump(softUART.print("->Rx ");)
+    const FtControlField cf  = controlFieldFromByte(emiFrame[4]);
 
     if (cf.functionCode != FC_SEND_UDAT)
     {
@@ -418,7 +431,7 @@ bool processVariableFrame(uint8_t* frame, const uint8_t length)
         return false;
     }
 
-    const uint8_t checkSum = frame[length - 2];
+    const uint8_t checkSum = emiFrame[emiFrameLength - 2];
     if (!cf.frameCountBitValid)
     {
         debugFatal();
@@ -438,92 +451,78 @@ bool processVariableFrame(uint8_t* frame, const uint8_t length)
     rcvFrameCountBit = cf.frameCountBit;
     lastCheckSum = checkSum;
 
-    uint8_t * buffer;
-    auto emi = static_cast<EmiCode>(frame[5]); //1. PEI_Switch_Req
-    switch (emi)  // EMI code
+    uint8_t * emiSendBuffer;
+    auto emiCode = static_cast<EmiCode>(emiFrame[5]);
+    switch (emiCode)
     {
     case PEI_Identify_Req: // KNX Spec. 3.0 3/6/3 3.3.9.5 p.56, 57
         /// Build PEI_Identify.con
         dump(softUART.println("Id");)
-        buffer = getFtFrameOut();
-        buffer[6]  = HIGH_BYTE(bcuFt12.ownAddress());
-        buffer[7]  = lowByte(bcuFt12.ownAddress());
-        buffer[8]  = 0x00; // 6 bytes KNX serial number
-        buffer[9]  = 0x01;
-        buffer[10] = 0x00;
-        buffer[11] = 0x01;
-        buffer[12] = 0xE4;
-        buffer[13] = 0x5A; // 6. byte
-        buffer[14] = 0; ///\todo A byte to much set, which is not transmitted
-        sendVariableFrame(buffer, FC_SEND_UDAT, PEI_Identify_Con, 10);
+        emiSendBuffer = getFtFrameOut();
+        emiSendBuffer[6]  = HIGH_BYTE(bcuFt12.ownAddress());
+        emiSendBuffer[7]  = lowByte(bcuFt12.ownAddress());
+        emiSendBuffer[8]  = 0x00; // 6 bytes KNX serial number
+        emiSendBuffer[9]  = 0x01;
+        emiSendBuffer[10] = 0x00;
+        emiSendBuffer[11] = 0x01;
+        emiSendBuffer[12] = 0xE4;
+        emiSendBuffer[13] = 0x5A; // 6. byte
+        emiSendBuffer[14] = 0; ///\todo A byte to much set, which is not transmitted
+        sendVariableFrame(emiSendBuffer, FC_SEND_UDAT, PEI_Identify_Con, 10);
         break;
 
-    case PEI_Switch_Req: // KNX Spec. 3.0 3/6/3 3.1.4 p.15
-        // class BCU1 doesn't support layer switching
-        dump(
-            softUART.print("PEI_Switch_Req 0x");
-            softUART.print(" ", frame[6], HEX, 2);  // System status
-            softUART.print(" ", frame[7], HEX, 2);  // LL / NL
-            softUART.print(" ", frame[8], HEX, 2);  // TLG / TLC
-            softUART.print(" ", frame[9], HEX, 2);  // TLL / AL
-            softUART.print(" ", frame[10], HEX, 2); // MAN / PEI
-            softUART.println(" ", frame[11], HEX, 2); // USR / res
-        )
+    case PEI_Switch_Req:
+        bcuFt12.handlePeiSwitchRequest(&emiFrame[6], emiFrameLength - 8);
         /// Reset has its own EMI code, so don't call reset() here.
         break;
 
     case T_Connect_Req:
         /// Build T_Connect.con message, KNX Spec 3.0 3/6/3 3.3.6.3 p.34
         dump(softUART.println("Connect");)
-        buffer = getFtFrameOut();
-        buffer[6]  = 0; // control (unused)
-        buffer[7]  = frame[9];  // destination address
-        buffer[8]  = frame[10]; // destination address
-        buffer[9]  = 0; // XX
-        buffer[10] = 0; // 0x00
-        buffer[11] = 0; ///\todo Again a byte to much set, which is not transmitted
-        sendVariableFrame(buffer, FC_SEND_UDAT, T_Connect_Con, 7);
+        emiSendBuffer = getFtFrameOut();
+        emiSendBuffer[6]  = 0; // control (unused)
+        emiSendBuffer[7]  = emiFrame[9];  // destination address
+        emiSendBuffer[8]  = emiFrame[10]; // destination address
+        emiSendBuffer[9]  = 0; // XX
+        emiSendBuffer[10] = 0; // 0x00
+        emiSendBuffer[11] = 0; ///\todo Again a byte to much set, which is not transmitted
+        sendVariableFrame(emiSendBuffer, FC_SEND_UDAT, T_Connect_Con, 7);
         break;
 
     case T_Data_Connected_Req:
-        dump(softUART.println("DataConn ", length);)
-        processDataConnectedRequest(frame, length);
+        dump(softUART.println("DataConn ", emiFrameLength);)
+        handleDataConnectedRequest(emiFrame, emiFrameLength);
         break;
 
-    case L_Data_Req: // KNX Spec. 2.1 3/6/3 3.3.4.2 p.20
+    case L_Data_Req: // KNX Spec. 3.0 3/6/3 3.3.4.2 p.21
     {
-        const uint8_t userDataLength = frame[1];
-        dump(softUART.println("DataReq ", userDataLength);)
-        const uint8_t emiControl = frame[VARIABLE_FRAME_HEADER_LENGTH];
-        // read requested priority
-        const uint8_t priority = emiControl & 0x0c;
-        const bool ackRequest = emiControl & 0x02;
+        const uint8_t userDataLength = emiFrame[1];
+        dump(
+            /// Include header length, for easier log interpretation
+            softUART.print("DataReq ", userDataLength + VARIABLE_FRAME_HEADER_LENGTH);
+        )
+        const uint8_t emiControl = emiFrame[VARIABLE_FRAME_HEADER_LENGTH];
+        // No need to evaluate ack_request(a) (bit 1 of L_Data.req control byte),
+        // because L_Data service on KNX TP1 is always acknowledge driven (KNX Spec. 3.0 3/2/2 2.4.2 p.38)
+        // but we need to read requested priority to prepare the control byte of the KNX telegram
+        const uint8_t emiPriority = emiControl & 0x0c;
 
-        if (ackRequest != ((bcuFt12.userRam->status() & BCU_STATUS_LINK_LAYER) == BCU_STATUS_LINK_LAYER))
-        {
-            ///\todo doesn't work right now with our Updater, which does no ft12 link configuration
-            /// match data link layer and ackRequest
-            //bcuFt12.userRam->status() ^= BCU_STATUS_LINK_LAYER | BCU_STATUS_PARITY;
-        }
-
-        buffer = getFtFrameOut();
-        // copy frame to buffer
-        memcpy(buffer, frame, length - 2);
+        emiSendBuffer = getFtFrameOut();
+        memcpy(emiSendBuffer, emiFrame, emiFrameLength - 2);
         // set requested priority and positive ACK flag (last bit 0)
-        buffer[VARIABLE_FRAME_HEADER_LENGTH] = priority & 0xfe;
+        emiSendBuffer[VARIABLE_FRAME_HEADER_LENGTH] = emiPriority & 0xfe;
+        sendVariableFrame(emiSendBuffer, FC_SEND_UDAT, L_Data_Con, userDataLength);
 
-        sendVariableFrame(buffer, FC_SEND_UDAT, L_Data_Con, userDataLength);
-
-        // Wait till bcuFt12 has sent our previous telegram
-        uint8_t * sendBuffer = bcuFt12.acquireSendBuffer();
-
-        // copy frame userdata to sendBuffer
         const uint8_t knxTelegramLength = userDataLength - 2;
-        memcpy(sendBuffer, &frame[VARIABLE_FRAME_HEADER_LENGTH], knxTelegramLength);
+        // Wait till bcuFt12 has sent our previous KNX telegram
+        uint8_t * knxSendBuffer = bcuFt12.acquireSendBuffer();
 
-        sendBuffer[0] = 0xB0 | priority; // KNX control byte
+        // copy emiFrame userdata to knxSendBuffer
+        memcpy(knxSendBuffer, &emiFrame[VARIABLE_FRAME_HEADER_LENGTH], knxTelegramLength);
+
+        initLpdu(knxSendBuffer, static_cast<KNXPriority>(emiPriority >> 2), false, FRAME_STANDARD);
         dump(softUART.println("Kou ", knxTelegramLength);)
-        bcuFt12.bus->sendTelegram(sendBuffer, knxTelegramLength);
+        bcuFt12.bus->sendTelegram(knxSendBuffer, knxTelegramLength);
         break;
     }
 
@@ -542,7 +541,7 @@ void processTelegram()
 {
     uint8_t * buffer = getFtFrameOut();
     const int32_t knxTelegramLength = bcuFt12.bus->telegramLen - 1; // -1 to exclude the KNX telegram checksum
-    dump(softUART.println("Kin ", knxTelegramLength);)
+    dump(softUART.print("Kin ", knxTelegramLength);)
 
     if (knxTelegramLength < (VARIABLE_FRAME_USER_DATA_LENGTH_MIN - 2)) // -2 exclude control field and EMI
     {
@@ -556,6 +555,7 @@ void processTelegram()
     }
     memcpy(buffer + VARIABLE_FRAME_HEADER_LENGTH, bcuFt12.bus->telegram, knxTelegramLength);
     sendVariableFrame(buffer, FC_SEND_UDAT, L_Data_Ind, knxTelegramLength + 2); // +2 control field and EMI
+    dump(softUART.println();)
 }
 
 /**
@@ -569,33 +569,34 @@ void loop()
     }
 
     int32_t rxByte;
-    while ((rxByte = serial.read()) > -1)
+    while ((rxByte = serial.read()) > -1) ///\todo read all in once into buffer of size FT_FRAME_SIZE
     {
         lastSerialRecvTime = millis();
         // start byte / frame detection, fixed or variable frame or just an ack
-        if (frameType == FT_NONE)
+        if (ftFrameType == FT_NONE)
         {
             switch (rxByte)
             {
                 case FT_ACK:
                 {
                     dump(
-                    if (!ackPending())
+                        softUART.println("->A");
+                        if (!ackPending())
                         {
                             ///\todo been here with knxd, but it should never happen
                             softUART.println("ERROR FT_NONE:ACK");
                         }
-                    );
+                    )
                     resetTx();
                     sendFrameCountBit = !sendFrameCountBit;
                     digitalWrite(LED_SERIAL_RX, LED_OFF);
                     continue;
                 }
                 case FT_FIXED_START:
-                    frameType = FT_FIXED_START;
+                    ftFrameType = FT_FIXED_START;
                     break;
                 case FT_VARIABLE_START:
-                    frameType = FT_VARIABLE_START;
+                    ftFrameType = FT_VARIABLE_START;
                     break;
                 case 0xA0: ///\todo Can't find 0xA0 in KNX Spec 3.0 3/6/2 6.4.3 Transmission Frame Format p.22ff
                     dump(softUART.println("ERROR UNKNOWN rxByte 0x", rxByte, HEX);)
@@ -603,7 +604,7 @@ void loop()
                     continue;
                 default:
                     /// We may land here on lost bytes, receiving was corrupted, other side closed its serial port...
-                    frameType = FT_NONE;
+                    ftFrameType = FT_NONE;
                     continue;
             }
         }
@@ -623,7 +624,7 @@ void loop()
             continue;
         }
 
-        if (frameType == FT_FIXED_START)
+        if (ftFrameType == FT_FIXED_START)
         {
             const FtError ftError = isValidFixedFrameHeader(&ftFrameIn[0], ftFrameInLen);
             switch (ftError)
@@ -662,7 +663,7 @@ void loop()
                     break;
             }
         }
-        else if (frameType == FT_VARIABLE_START)
+        else if (ftFrameType == FT_VARIABLE_START)
         {
             const FtError ftError = isValidVariableFrameHeader(&ftFrameIn[0], ftFrameInLen);
             switch (ftError)
@@ -676,16 +677,18 @@ void loop()
                 case FtError::FT_INVALID_CHECKSUM:
                 case FtError::FT_INVALID_LENGTH:
                     resetRx();
-                    debugFatal();
+                    dump(softUART.print("ERROR invalid frame ");)
                     break;
 
                 case FtError::FT_NO_ERROR:
                     sendFt12Ack();
-                    dump(if (ackPending())
-                    {
-                        /// This may happen, see sendFt12withAckWaiting(..) for details
-                        softUART.println("ERROR FT_VARIABLE_START: ACK pending");
-                    });
+                    dump(
+                        if (ackPending())
+                        {
+                            /// This may happen, see sendFt12withAckWaiting(..) for details
+                            softUART.println("ERROR FT_VARIABLE_START: ACK pending");
+                        }
+                    );
                     if (!processVariableFrame(&ftFrameIn[0], ftFrameInLen))
                     {
                         debugFatal();
@@ -717,7 +720,7 @@ void loop()
         }
     }
 
-    if (frameType != FT_NONE && elapsed(lastSerialRecvTime) > ft12ExchangeTimeoutMs)
+    if (ftFrameType != FT_NONE && elapsed(lastSerialRecvTime) > ft12ExchangeTimeoutMs)
     {
         resetRx();
     }

@@ -96,13 +96,47 @@ struct FtControlField
 };
 
 /**
+ * \brief EMI2 Layer access module IDs
+ * \note KNX Spec. 3.0 3/6/3 3.1.4 Layer access in EMI2 p.15ff
+ */
+enum Emi2ModuleID : uint8_t
+{
+    EMI2_MODULE_DISCARD = 0, ///< Message shall be discarded
+    EMI2_MODULE_LL = 1,  ///< Data Link Layer
+    EMI2_MODULE_NL = 2,  ///< Network Link Layer
+    EMI2_MODULE_TLG = 3, ///< Transport Layer Group oriented
+    EMI2_MODULE_TLC = 4, ///< Transport Layer Connection Oriented
+    EMI2_MODULE_TLL = 5, ///< Transport Layer local
+    EMI2_MODULE_AL = 6,  ///< Application Layer
+    EMI2_MODULE_MAN = 7, ///< Management part of the AL
+    EMI2_MODULE_PEI = 8, ///< Physical External Interface
+    EMI2_MODULE_USR = 9,  ///< Application running in the bus access unit
+    EMI2_MODULE_RES = 0xa ///< Reserved?
+};
+
+typedef struct
+{
+    Emi2ModuleID linkLayer;
+    Emi2ModuleID networkLayer;
+    Emi2ModuleID transportLayerGroupOriented;
+    Emi2ModuleID transportLayerConnectionOriented;
+    Emi2ModuleID transportLayerLocal;
+    Emi2ModuleID applicationLayer;
+    Emi2ModuleID managementApplicationLayer;
+    Emi2ModuleID physicalExternalInterface;
+    Emi2ModuleID user;
+    Emi2ModuleID reserved;
+} Emi2LayerRedirection;
+
+/**
  * \brief External message interface codes
  * \details Abbreviations:
  *          - DLL = Data Link Layer
  *          - NL  = Network Link Layer
  *          - TL  = Transport Layer
  *          - TLG = Transport Layer Group oriented
- *          - TLC = Transport Layer local
+ *          - TLC = Transport Layer Connection Oriented
+ *          - TLL = Transport Layer local
  *          - AL  = Application Layer
  *          - ALG = Application Layer Group oriented
  *          - MAN = Application Layer Management part
