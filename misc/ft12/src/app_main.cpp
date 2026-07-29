@@ -469,7 +469,7 @@ bool processVariableFrame(uint8_t* frame, const uint8_t length)
             softUART.print(" ", frame[10], HEX, 2); // MAN / PEI
             softUART.println(" ", frame[11], HEX, 2); // USR / res
         )
-        reset();
+        /// Reset has its own EMI code, so don't call reset() here.
         break;
 
     case T_Connect_Req:
