@@ -233,7 +233,7 @@ BcuBase* setup()
     bcuFt12.setOwnAddress(FT_OWN_KNX_ADDRESS);
     serial.setTxPin(PIN_FT_SERIAL_TX);
     pinMode(PIN_FT_SERIAL_RX, SERIAL_RXD | PULL_UP | HYSTERESIS);
-    serial.begin(FT12_BAUD_RATE, SERIAL_8E1, RxTriggerLevel::CHAR_4);
+    serial.begin(FT12_BAUD_RATE, SERIAL_8E1, RxTriggerLevel::CHAR_1); /// ACKs are just one byte, and we need to be fast
     reset();
     return &bcuFt12;
 }
