@@ -23,7 +23,7 @@
 #include "debug_handler.h"
 
 
-APP_VERSION("SBft12  ", "0", "03")  // Don't forget to also change the build-variable sw_version
+APP_VERSION("SBft12  ", "0", "04")  // Don't forget to also change the build-variable sw_version
 
 auto bcuFt12 = BcuFt12();  //!< Bus coupling unit Mask version 0x0012 of the ft12 module
 
