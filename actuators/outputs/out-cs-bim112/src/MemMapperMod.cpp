@@ -12,14 +12,14 @@
 
 #include <MemMapperMod.h>
 
-int MemMapperMod::writeMemPtr(int virtAddress, uint8_t *data, int length)
+MemMapperResult MemMapperMod::writeMemPtr(uint32_t virtAddress, uint8_t* data, uint32_t length)
 {
  if ((virtAddress >= 0x4B20) && (virtAddress < 0x8000))
  { // Hier wird ein größerer Speicherbereich ab 0x4B20 emuliert.
   // Die Daten werden Modulo-mäßig in einen kleinen 32 Byte Bereich geschrieben.
   // Das nutzt die Eigenschaft der ETS aus, immer kleine Bereiche zu schreiben
   // und sofort zu verifizieren.
-  for (int i=virtAddress; i < (virtAddress+length); i++)
+  for (uint32_t i=virtAddress; i < (virtAddress+length); i++)
   {
    fakemem[i & 31] = *data++;
   }
@@ -31,14 +31,14 @@ int MemMapperMod::writeMemPtr(int virtAddress, uint8_t *data, int length)
   return MEM_MAPPER_INVALID_ADDRESS;
 }
 
-int MemMapperMod::readMemPtr(int virtAddress, uint8_t *data, int length, bool forceFlash)
+MemMapperResult MemMapperMod::readMemPtr(uint32_t virtAddress, uint8_t* data, uint32_t length, bool forceFlash)
 {
  if ((virtAddress >= 0x4B20) && (virtAddress < 0x8000))
  { // Hier wird ein größerer Speicherbereich ab 0x4B20 emuliert.
   // Die Daten werden Modulo-mäßig in einen kleinen 32 Byte Bereich geschrieben.
   // Das nutzt die Eigenschaft der ETS aus, immer kleine Bereiche zu schreiben
   // und sofort zu verifizieren.
-  for (int i=virtAddress; i < (virtAddress+length); i++)
+  for (uint32_t i=virtAddress; i < (virtAddress+length); i++)
   {
    *data++ = fakemem[i & 31];
   }
@@ -50,7 +50,7 @@ int MemMapperMod::readMemPtr(int virtAddress, uint8_t *data, int length, bool fo
    return MEM_MAPPER_INVALID_ADDRESS;
 }
 
-bool MemMapperMod::isMapped(int virtAddress)
+bool MemMapperMod::isMapped(uint32_t virtAddress)
 {
  // Hier wird ein größerer Speicherbereich ab 0x4B20 emuliert.
  if ((virtAddress >= 0x4B20) && (virtAddress < 0x8000))
